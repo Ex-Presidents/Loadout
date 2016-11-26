@@ -1,0 +1,10 @@
+D:\Github\Loadout\bin\Debug\Loadout.dll
+D:\Github\Loadout\bin\Debug\Loadout.pdb
+D:\Github\Loadout\bin\Debug\Assembly-CSharp-firstpass.dll
+D:\Github\Loadout\bin\Debug\Assembly-CSharp.dll
+D:\Github\Loadout\bin\Debug\Rocket.API.dll
+D:\Github\Loadout\bin\Debug\Rocket.Core.dll
+D:\Github\Loadout\bin\Debug\Rocket.Unturned.dll
+D:\Github\Loadout\bin\Debug\UnityEngine.dll
+D:\Github\Loadout\obj\Debug\Loadout.dll
+D:\Github\Loadout\obj\Debug\Loadout.pdb
