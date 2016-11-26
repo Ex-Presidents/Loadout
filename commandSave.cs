@@ -80,11 +80,10 @@ namespace Loadout
 			{
 				return new List<string>
 				{
-					//"loadout.savekit"
+					"loadout.use"
 				};
 
 			}
 		}
-
 	}
 }

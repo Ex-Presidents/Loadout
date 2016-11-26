@@ -4,5 +4,10 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="commandLoad.cs">
+    <Files>
+      <File FileName="commandSave.cs" Line="88" Column="3" />
+      <File FileName="commandLoad.cs" Line="38" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
 </Properties>
