@@ -5,10 +5,10 @@ namespace Loadout
 {
 	public class LoadoutInventory
 	{
-		public List<ushort> items;
+		public List<LoadoutItem> items;
 		public LoadoutClothes clothes;
 
-		public LoadoutInventory(List<ushort> items, LoadoutClothes clothes)
+		public LoadoutInventory(List<LoadoutItem> items, LoadoutClothes clothes)
 		{
 			this.items = items;
 			this.clothes = clothes;

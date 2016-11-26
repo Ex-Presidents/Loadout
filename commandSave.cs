@@ -41,13 +41,13 @@ namespace Loadout
 			UnturnedPlayer player = (UnturnedPlayer)caller;
 			//SAVING INVENTORY :3
 				//SAVING ITEMS :3
-				List<ushort> itemList = new List<ushort>();
+				List<LoadoutItem> itemList = new List<LoadoutItem>();
 				for (byte p = 0; p < PlayerInventory.PAGES - 1; p++)
 				{
 					for (byte i = 0; i < player.Inventory.getItemCount(p); i++)
 					{
 						Item item = player.Inventory.getItem(p, i).item;
-						itemList.Add(item.id);
+						itemList.Add(new LoadoutItem(item.id, item.metadata));
 					}
 				}
 

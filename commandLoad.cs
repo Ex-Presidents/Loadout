@@ -38,31 +38,33 @@ namespace Loadout
 		{
 			UnturnedPlayer player = (UnturnedPlayer)caller;
 			//LOADING PLAYERS INVENTORY :3
-			//LOADING / GIVING CLOTHES :3
-			PlayerClothing clo = player.Player.clothing;
-			LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID].clothes;
+				//LOADING / GIVING CLOTHES :3
+				PlayerClothing clo = player.Player.clothing;
+				LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID].clothes;
 
-			LoadoutHat hat = clothes.hat;
-			LoadoutMask mask = clothes.mask;
-			LoadoutShirt shirt = clothes.shirt;
-			LoadoutVest vest = clothes.vest;
-			LoadoutBackpack backpack = clothes.backpack;
-			LoadoutPants pants = clothes.pants;
+				LoadoutHat hat = clothes.hat;
+				LoadoutMask mask = clothes.mask;
+				LoadoutShirt shirt = clothes.shirt;
+				LoadoutVest vest = clothes.vest;
+				LoadoutBackpack backpack = clothes.backpack;
+				LoadoutPants pants = clothes.pants;
 
-			if (hat != null) clo.askWearHat(hat.id, hat.quality, hat.state, true);
-			if (mask != null) clo.askWearMask(mask.id, mask.quality, mask.state, true);
-			if (shirt != null) clo.askWearShirt(shirt.id, shirt.quality, shirt.state, true);
-			if (vest != null) clo.askWearVest(vest.id, vest.quality, vest.state, true);
-			if (backpack != null) clo.askWearBackpack(backpack.id, backpack.quality, backpack.state, true);
-			if (pants != null) clo.askWearPants(pants.id, pants.quality, pants.state, true);
-			//END
+				if (hat != null) clo.askWearHat(hat.id, hat.quality, hat.state, true);
+				if (mask != null) clo.askWearMask(mask.id, mask.quality, mask.state, true);
+				if (shirt != null) clo.askWearShirt(shirt.id, shirt.quality, shirt.state, true);
+				if (vest != null) clo.askWearVest(vest.id, vest.quality, vest.state, true);
+				if (backpack != null) clo.askWearBackpack(backpack.id, backpack.quality, backpack.state, true);
+				if (pants != null) clo.askWearPants(pants.id, pants.quality, pants.state, true);
+				//END
 
-			//LOADING / GIVING ITEMS :3
-			foreach (ushort id in Loadout.instance.inventories[player.CSteamID].items)
-			{
-				player.GiveItem(new Item(id, true));
-			}
-			//END
+				//LOADING / GIVING ITEMS :3
+				foreach (LoadoutItem item in Loadout.instance.inventories[player.CSteamID].items)
+				{
+					Item item2 = new Item(item.id, true);
+					item2.metadata = item.meta;
+					player.Inventory.tryAddItem(item2, true);
+				}
+				//END
 			//END
 			UnturnedChat.Say(player, "Your kit loaded suffescully!");
 		}
