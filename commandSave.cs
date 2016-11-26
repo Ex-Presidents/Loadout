@@ -71,7 +71,7 @@ namespace Loadout
 				//END
 			//END
 
-			UnturnedChat.Say(player, "Your kit saved suffescully!");
+			UnturnedChat.Say(player, Loadout.instance.Translate("saved"));
 		}
 
 		public List<string> Permissions

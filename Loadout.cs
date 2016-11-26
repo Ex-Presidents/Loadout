@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Rocket.Core.Plugins;
-using Rocket.API;
-using Rocket.Core;
 using Rocket.Core.Logging;
-using Rocket.Unturned.Player;
+using Rocket.API.Collections;
 
 namespace Loadout
 {
@@ -23,5 +17,17 @@ namespace Loadout
 			Logger.LogWarning("\tPlugin Loadout Loaded Successfully");
 			inventories = new Dictionary<Steamworks.CSteamID, LoadoutInventory>();
 		}
+        public override TranslationList DefaultTranslations
+        {
+            get
+            {
+                return new TranslationList()
+                {
+                    {"no_kit", "Please save a kit first!"},
+                    {"loaded", "Loaded kit successfully!"},
+                    {"saved", "Saved kit successfully!"}
+                };
+            }
+        }
     }
 }
