@@ -39,7 +39,7 @@ namespace Loadout
             UnturnedPlayer player = (UnturnedPlayer)caller;
             if (!Loadout.instance.inventories.ContainsKey(player.CSteamID))
             {
-                UnturnedChat.Say(Loadout.instance.Translate("no_kit"));
+                UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
                 return;
             }
             //LOADING PLAYERS INVENTORY :3
