@@ -28,7 +28,7 @@ namespace Loadout
 
 		public string Syntax
 		{
-			get { return ""; }
+			get { return "[Kit Name]"; }
 		}
 
 		public List<string> Aliases
@@ -39,7 +39,46 @@ namespace Loadout
 		public void Execute(IRocketPlayer caller, string[] command)
 		{
 			UnturnedPlayer player = (UnturnedPlayer)caller;
-			//SAVING INVENTORY :3
+
+			string kitName = "default";
+
+			CSteamID id = player.CSteamID;
+
+			if (!Loadout.instance.inventories.ContainsKey(id)) Loadout.instance.inventories.Add(id, new Dictionary<string, LoadoutInventory>());
+
+			if (caller.HasPermission("loadout.multiplekits"))
+			{
+				if (command.Length == 1)
+				{
+					kitName = command[0].ToLower();
+				}
+			}
+			else {
+				UnturnedChat.Say(player, Loadout.instance.Translate("only_default_save"));
+			}
+
+			int maxKits = 0;
+
+			if (caller.HasPermission("loadout.infite"))
+			{
+				maxKits = int.MaxValue;
+			}
+			else if (caller.HasPermission("loadout.four"))
+			{
+				maxKits = 4;
+			}
+			else if (caller.HasPermission("loadout.two"))
+			{
+				maxKits = 2;
+			}
+			else {
+				maxKits = 1;
+			}
+
+			if (Loadout.instance.inventories[id].Count < maxKits || caller.HasPermission("loadout.multiplekits") == false)
+			{
+				//SAVING INVENTORY :3
+				if (Loadout.instance.inventories[id].ContainsKey(kitName)) Loadout.instance.inventories[id].Remove(kitName);
 				//SAVING ITEMS :3
 				List<LoadoutItem> itemList = new List<LoadoutItem>();
 				for (byte p = 0; p < PlayerInventory.PAGES - 1; p++)
@@ -50,13 +89,8 @@ namespace Loadout
 						itemList.Add(new LoadoutItem(item.id, item.metadata));
 					}
 				}
-
-				if (Loadout.instance.inventories.ContainsKey(player.CSteamID))
-				{
-					Loadout.instance.inventories.Remove(player.CSteamID);
-				}
 				//END
-				
+
 				//Saving clothing :3
 				PlayerClothing clo = player.Player.clothing;
 
@@ -67,11 +101,18 @@ namespace Loadout
 				LoadoutBackpack backpack = new LoadoutBackpack(clo.backpack, clo.backpackQuality, clo.backpackState);
 				LoadoutPants pants = new LoadoutPants(clo.pants, clo.pantsQuality, clo.pantsState);
 
-				Loadout.instance.inventories.Add(player.CSteamID, new LoadoutInventory(itemList, new LoadoutClothes(hat, mask, shirt, vest, backpack, pants)));
+				LoadoutClothes clothes = new LoadoutClothes(hat, mask, shirt, vest, backpack, pants);
 				//END
-			//END
 
-			UnturnedChat.Say(player, Loadout.instance.Translate("saved"));
+				Loadout.instance.inventories[id].Add(kitName, new LoadoutInventory(itemList, clothes));
+				//END
+			}
+			else {
+				UnturnedChat.Say(player, Loadout.instance.Translate("max_kits"));
+				return;
+			}
+
+			UnturnedChat.Say(player, kitName + ", " + Loadout.instance.Translate("saved"));
 		}
 
 		public List<string> Permissions
@@ -80,7 +121,7 @@ namespace Loadout
 			{
 				return new List<string>
 				{
-					"loadout.use"
+					"loadout.savekit"
 				};
 
 			}

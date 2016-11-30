@@ -26,7 +26,7 @@ namespace Loadout
 
         public string Syntax
         {
-            get { return ""; }
+            get { return "[Kit Name]"; }
         }
 
         public List<string> Aliases
@@ -39,13 +39,33 @@ namespace Loadout
             UnturnedPlayer player = (UnturnedPlayer)caller;
             if (!Loadout.instance.inventories.ContainsKey(player.CSteamID))
             {
-                UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
+                UnturnedChat.Say(player, Loadout.instance.Translate("no_kits"));
                 return;
             }
+
+			String kitName = "default";
+
+			if (caller.HasPermission("loadout.multiplekits"))
+			{
+				if (command.Length == 1)
+				{
+					kitName = command[0];
+				}
+			}
+			else {
+				UnturnedChat.Say(player, Loadout.instance.Translate("only_default_load"));
+			}
+
+			if (!Loadout.instance.inventories[player.CSteamID].ContainsKey(kitName))
+			{
+				UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
+				return;
+			}
+
             //LOADING PLAYERS INVENTORY :3
             //LOADING / GIVING CLOTHES :3
             PlayerClothing clo = player.Player.clothing;
-            LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID].clothes;
+			LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID][kitName].clothes;
 
             LoadoutHat hat = clothes.hat;
             LoadoutMask mask = clothes.mask;
@@ -63,16 +83,16 @@ namespace Loadout
             //END
 
             //LOADING / GIVING ITEMS :3
-            for (int i = 0; i < Loadout.instance.inventories[player.CSteamID].items.Count; i++)
+            for (int i = 0; i < Loadout.instance.inventories[player.CSteamID][kitName].items.Count; i++)
             {
-                LoadoutItem item = Loadout.instance.inventories[player.CSteamID].items[i];
+                LoadoutItem item = Loadout.instance.inventories[player.CSteamID][kitName].items[i];
                 Item item2 = new Item(item.id, true);
                 item2.metadata = item.meta;
                 player.Inventory.tryAddItem(item2, true);
             }
             //END
             //END
-            UnturnedChat.Say(player, Loadout.instance.Translate("loaded"));
+			UnturnedChat.Say(player, kitName + ", " + Loadout.instance.Translate("loaded"));
         }
 
         public List<string> Permissions
@@ -81,7 +101,7 @@ namespace Loadout
             {
                 return new List<string>
                 {
-                    "loadout.use"
+                    "loadout.loadkit"
                 };
 
             }
