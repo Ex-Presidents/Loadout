@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Loadout
 {
-    public class commandLoad : IRocketCommand
+    public class CommandLoad : IRocketCommand
     {
         #region Properties
         public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
@@ -73,8 +73,10 @@ namespace Loadout
             for (int i = 0; i < Loadout.instance.inventories[player.CSteamID][kitName].items.Count; i++)
             {
                 LoadoutItem item = Loadout.instance.inventories[player.CSteamID][kitName].items[i];
-                Item item2 = new Item(item.id, true);
-                item2.metadata = item.meta;
+                Item item2 = new Item(item.id, true)
+                {
+                    metadata = item.meta
+                };
                 player.Inventory.tryAddItem(item2, true);
             }
 

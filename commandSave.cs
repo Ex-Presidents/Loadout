@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Loadout
 {
-    public class commandSave : IRocketCommand
+    public class CommandSave : IRocketCommand
     {
         #region Properties
         public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
@@ -89,8 +89,10 @@ namespace Loadout
 
             if (!Loadout.instance.inventories.ContainsKey(id))
             {
-                Dictionary<string, LoadoutInventory> kits = new Dictionary<string, LoadoutInventory>();
-                kits.Add(kitName, new LoadoutInventory(itemList, clothes));
+                Dictionary<string, LoadoutInventory> kits = new Dictionary<string, LoadoutInventory>
+                {
+                    { kitName, new LoadoutInventory(itemList, clothes) }
+                };
                 Loadout.instance.inventories.Add(id, kits);
             }
             else
