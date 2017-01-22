@@ -1,38 +1,25 @@
-﻿using System;
-using Rocket.API;
-using Rocket.Unturned.Player;
-using System.Collections.Generic;
-using SDG.Unturned;
+﻿using Rocket.API;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Player;
+using SDG.Unturned;
+using System;
+using System.Collections.Generic;
 
 namespace Loadout
 {
     public class commandLoad : IRocketCommand
     {
-        public AllowedCaller AllowedCaller
-        {
-            get { return AllowedCaller.Player; }
-        }
+        public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
 
-        public string Name
-        {
-            get { return "loadkit"; }
-        }
+        public string Name { get { return "loadkit"; } }
 
-        public string Help
-        {
-            get { return "This command will load your saved gear, you can save your gear by typing /savekit"; }
-        }
+        public string Help { get { return "This command will load your saved gear, you can save your gear by typing /savekit"; } }
 
-        public string Syntax
-        {
-            get { return "[Kit Name]"; }
-        }
+        public string Syntax { get { return "[Kit Name]"; } }
 
-        public List<string> Aliases
-        {
-            get { return new List<string>(); }
-        }
+        public List<string> Aliases { get { return new List<string>(); } }
+
+        public List<string> Permissions { get { return new List<string> { "loadout.loadkit" }; } }
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
@@ -43,29 +30,24 @@ namespace Loadout
                 return;
             }
 
-			String kitName = "default";
+            String kitName = "default";
 
-			if (caller.HasPermission("loadout.multiplekits"))
-			{
-				if (command.Length == 1)
-				{
-					kitName = command[0];
-				}
-			}
-			else {
-				UnturnedChat.Say(player, Loadout.instance.Translate("only_default_load"));
-			}
+            if (caller.HasPermission("loadout.multiplekits"))
+                if (command.Length == 1)
+                    kitName = command[0];
+                else
+                    UnturnedChat.Say(player, Loadout.instance.Translate("only_default_load"));
 
-			if (!Loadout.instance.inventories[player.CSteamID].ContainsKey(kitName))
-			{
-				UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
-				return;
-			}
+            if (!Loadout.instance.inventories[player.CSteamID].ContainsKey(kitName))
+            {
+                UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
+                return;
+            }
 
-            //LOADING PLAYERS INVENTORY :3
-            //LOADING / GIVING CLOTHES :3
+            #region clothing
+
             PlayerClothing clo = player.Player.clothing;
-			LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID][kitName].clothes;
+            LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID][kitName].clothes;
 
             LoadoutHat hat = clothes.hat;
             LoadoutMask mask = clothes.mask;
@@ -80,9 +62,11 @@ namespace Loadout
             if (vest != null) clo.askWearVest(vest.id, vest.quality, vest.state, true);
             if (backpack != null) clo.askWearBackpack(backpack.id, backpack.quality, backpack.state, true);
             if (pants != null) clo.askWearPants(pants.id, pants.quality, pants.state, true);
-            //END
 
-            //LOADING / GIVING ITEMS :3
+            #endregion clothing
+
+            #region items
+
             for (int i = 0; i < Loadout.instance.inventories[player.CSteamID][kitName].items.Count; i++)
             {
                 LoadoutItem item = Loadout.instance.inventories[player.CSteamID][kitName].items[i];
@@ -90,21 +74,10 @@ namespace Loadout
                 item2.metadata = item.meta;
                 player.Inventory.tryAddItem(item2, true);
             }
-            //END
-            //END
-			UnturnedChat.Say(player, kitName + ", " + Loadout.instance.Translate("loaded"));
-        }
 
-        public List<string> Permissions
-        {
-            get
-            {
-                return new List<string>
-                {
-                    "loadout.loadkit"
-                };
+            #endregion items
 
-            }
+            UnturnedChat.Say(player, kitName + ", " + Loadout.instance.Translate("loaded"));
         }
     }
 }

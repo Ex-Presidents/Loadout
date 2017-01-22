@@ -1,130 +1,93 @@
-﻿using System;
-using Rocket.API;
-using Rocket.Unturned.Player;
-using System.Collections.Generic;
-using SDG.Unturned;
-using Rocket.Core.Logging;
-using Steamworks;
+﻿using Rocket.API;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Player;
+using SDG.Unturned;
+using Steamworks;
+using System.Collections.Generic;
 
 namespace Loadout
 {
-	public class commandSave : IRocketCommand
-	{
-		public AllowedCaller AllowedCaller
-		{
-			get { return AllowedCaller.Player; }
-		}
+    public class commandSave : IRocketCommand
+    {
+        public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
 
-		public string Name
-		{
-			get { return "savekit"; }
-		}
+        public string Name { get { return "savekit"; } }
 
-		public string Help
-		{
-			get { return "This command will save your current gear, you can load it by typing /loadkit"; }
-		}
+        public string Help { get { return "This command will save your current gear, you can load it by typing /loadkit"; } }
 
-		public string Syntax
-		{
-			get { return "[Kit Name]"; }
-		}
+        public string Syntax { get { return "[Kit Name]"; } }
 
-		public List<string> Aliases
-		{
-			get { return new List<string>(); }
-		}
+        public List<string> Aliases { get { return new List<string>(); } }
 
-		public void Execute(IRocketPlayer caller, string[] command)
-		{
-			UnturnedPlayer player = (UnturnedPlayer)caller;
+        public List<string> Permissions { get { return new List<string> { "loadout.savekit" }; } }
 
-			string kitName = "default";
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            UnturnedPlayer player = (UnturnedPlayer)caller;
 
-			CSteamID id = player.CSteamID;
+            string kitName = "default";
 
-			if (!Loadout.instance.inventories.ContainsKey(id)) Loadout.instance.inventories.Add(id, new Dictionary<string, LoadoutInventory>());
+            CSteamID id = player.CSteamID;
 
-			if (caller.HasPermission("loadout.multiplekits"))
-			{
-				if (command.Length == 1)
-				{
-					kitName = command[0].ToLower();
-				}
-			}
-			else {
-				UnturnedChat.Say(player, Loadout.instance.Translate("only_default_save"));
-			}
+            if (!Loadout.instance.inventories.ContainsKey(id)) Loadout.instance.inventories.Add(id, new Dictionary<string, LoadoutInventory>());
 
-			int maxKits = 0;
+            if (caller.HasPermission("loadout.multiplekits"))
+                if (command.Length == 1)
+                    kitName = command[0].ToLower();
+                else
+                    UnturnedChat.Say(player, Loadout.instance.Translate("only_default_save"));
 
-			if (caller.HasPermission("loadout.infite"))
-			{
-				maxKits = int.MaxValue;
-			}
-			else if (caller.HasPermission("loadout.four"))
-			{
-				maxKits = 4;
-			}
-			else if (caller.HasPermission("loadout.two"))
-			{
-				maxKits = 2;
-			}
-			else {
-				maxKits = 1;
-			}
+            int maxKits = 0;
 
-			if (Loadout.instance.inventories[id].Count < maxKits || caller.HasPermission("loadout.multiplekits") == false)
-			{
-				//SAVING INVENTORY :3
-				if (Loadout.instance.inventories[id].ContainsKey(kitName)) Loadout.instance.inventories[id].Remove(kitName);
-				//SAVING ITEMS :3
-				List<LoadoutItem> itemList = new List<LoadoutItem>();
-				for (byte p = 0; p < PlayerInventory.PAGES - 1; p++)
-				{
-					for (byte i = 0; i < player.Inventory.getItemCount(p); i++)
-					{
-						Item item = player.Inventory.getItem(p, i).item;
-						itemList.Add(new LoadoutItem(item.id, item.metadata));
-					}
-				}
-				//END
+            if (caller.HasPermission("loadout.infite"))
+                maxKits = int.MaxValue;
+            else if (caller.HasPermission("loadout.four"))
+                maxKits = 4;
+            else if (caller.HasPermission("loadout.two"))
+                maxKits = 2;
+            else
+                maxKits = 1;
 
-				//Saving clothing :3
-				PlayerClothing clo = player.Player.clothing;
+            if (Loadout.instance.inventories[id].Count == maxKits)
+            {
+                UnturnedChat.Say(player, Loadout.instance.Translate("max_kits"));
+                return;
+            }
 
-				LoadoutHat hat = new LoadoutHat(clo.hat, clo.hatQuality, clo.hatState);
-				LoadoutMask mask = new LoadoutMask(clo.mask, clo.maskQuality, clo.maskState);
-				LoadoutShirt shirt = new LoadoutShirt(clo.shirt, clo.shirtQuality, clo.shirtState);
-				LoadoutVest vest = new LoadoutVest(clo.vest, clo.vestQuality, clo.vestState);
-				LoadoutBackpack backpack = new LoadoutBackpack(clo.backpack, clo.backpackQuality, clo.backpackState);
-				LoadoutPants pants = new LoadoutPants(clo.pants, clo.pantsQuality, clo.pantsState);
+            if (Loadout.instance.inventories[id].ContainsKey(kitName)) Loadout.instance.inventories[id].Remove(kitName);
 
-				LoadoutClothes clothes = new LoadoutClothes(hat, mask, shirt, vest, backpack, pants);
-				//END
+            List<LoadoutItem> itemList = new List<LoadoutItem>();
 
-				Loadout.instance.inventories[id].Add(kitName, new LoadoutInventory(itemList, clothes));
-				//END
-			}
-			else {
-				UnturnedChat.Say(player, Loadout.instance.Translate("max_kits"));
-				return;
-			}
+            #region items
 
-			UnturnedChat.Say(player, kitName + ", " + Loadout.instance.Translate("saved"));
-		}
+            for (byte p = 0; p < PlayerInventory.PAGES - 1; p++)
+            {
+                for (byte i = 0; i < player.Inventory.getItemCount(p); i++)
+                {
+                    Item item = player.Inventory.getItem(p, i).item;
+                    itemList.Add(new LoadoutItem(item.id, item.metadata));
+                }
+            }
 
-		public List<string> Permissions
-		{
-			get
-			{
-				return new List<string>
-				{
-					"loadout.savekit"
-				};
+            #endregion items
 
-			}
-		}
-	}
+            #region clothing
+
+            PlayerClothing clo = player.Player.clothing;
+
+            LoadoutHat hat = new LoadoutHat(clo.hat, clo.hatQuality, clo.hatState);
+            LoadoutMask mask = new LoadoutMask(clo.mask, clo.maskQuality, clo.maskState);
+            LoadoutShirt shirt = new LoadoutShirt(clo.shirt, clo.shirtQuality, clo.shirtState);
+            LoadoutVest vest = new LoadoutVest(clo.vest, clo.vestQuality, clo.vestState);
+            LoadoutBackpack backpack = new LoadoutBackpack(clo.backpack, clo.backpackQuality, clo.backpackState);
+            LoadoutPants pants = new LoadoutPants(clo.pants, clo.pantsQuality, clo.pantsState);
+
+            LoadoutClothes clothes = new LoadoutClothes(hat, mask, shirt, vest, backpack, pants);
+
+            #endregion clothing
+
+            Loadout.instance.inventories[id].Add(kitName, new LoadoutInventory(itemList, clothes));
+            UnturnedChat.Say(player, kitName + ", " + Loadout.instance.Translate("saved"));
+        }
+    }
 }
