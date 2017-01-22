@@ -9,6 +9,7 @@ namespace Loadout
 {
     public class commandLoad : IRocketCommand
     {
+        #region Properties
         public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
 
         public string Name { get { return "loadkit"; } }
@@ -20,6 +21,8 @@ namespace Loadout
         public List<string> Aliases { get { return new List<string>(); } }
 
         public List<string> Permissions { get { return new List<string> { "loadout.loadkit" }; } }
+
+        #endregion Properties
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
