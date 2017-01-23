@@ -7,10 +7,30 @@ namespace Loadout
         public List<LoadoutItem> items;
         public LoadoutClothes clothes;
 
+        
+
         public LoadoutInventory(List<LoadoutItem> items, LoadoutClothes clothes)
         {
             this.items = items;
             this.clothes = clothes;
         }
+
+
+
+
+    }
+
+    public class LoadoutList
+    {
+
+        
+        public Dictionary<string, LoadoutInventory> _invs;
+
+        
+        public LoadoutList(Dictionary<string, LoadoutInventory> z)
+        {
+            this._invs = z;
+        }
+
     }
 }
