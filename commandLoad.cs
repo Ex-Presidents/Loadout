@@ -29,20 +29,6 @@ namespace Loadout
             UnturnedPlayer player = (UnturnedPlayer)caller;
             if (!Loadout.instance.inventories.ContainsKey(player.CSteamID))
             {
-                UnturnedChat.Say(player, Loadout.instance.Translate("no_kits"));
-                return;
-            }
-
-            String kitName = "default";
-
-            if (caller.HasPermission("loadout.multiplekits"))
-                if (command.Length == 1)
-                    kitName = command[0];
-                else
-                    UnturnedChat.Say(player, Loadout.instance.Translate("only_default_load"));
-
-            if (!Loadout.instance.inventories[player.CSteamID].ContainsKey(kitName))
-            {
                 UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
                 return;
             }
@@ -50,7 +36,7 @@ namespace Loadout
             #region clothing
 
             PlayerClothing clo = player.Player.clothing;
-            LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID][kitName].clothes;
+            LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID].clothes;
 
             LoadoutHat hat = clothes.hat;
             LoadoutMask mask = clothes.mask;
@@ -70,9 +56,9 @@ namespace Loadout
 
             #region items
 
-            for (int i = 0; i < Loadout.instance.inventories[player.CSteamID][kitName].items.Count; i++)
+            for (int i = 0; i < Loadout.instance.inventories[player.CSteamID].items.Count; i++)
             {
-                LoadoutItem item = Loadout.instance.inventories[player.CSteamID][kitName].items[i];
+                LoadoutItem item = Loadout.instance.inventories[player.CSteamID].items[i];
                 Item item2 = new Item(item.id, true)
                 {
                     metadata = item.meta
@@ -82,7 +68,7 @@ namespace Loadout
 
             #endregion items
 
-            UnturnedChat.Say(player, kitName + ", " + Loadout.instance.Translate("loaded"));
+            UnturnedChat.Say(caller, Loadout.instance.Translate("loaded"));
         }
     }
 }
