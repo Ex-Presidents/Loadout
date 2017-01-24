@@ -27,7 +27,13 @@ namespace Loadout
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
-            if (!Loadout.instance.inventories.ContainsKey(player.CSteamID))
+            if (command.Length != 1)
+            {
+                UnturnedChat.Say(caller, Syntax);
+                return;
+            }
+
+            if (!Loadout.instance.playerInvs[player.CSteamID]._invs.ContainsKey(command[0])) 
             {
                 UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
                 return;
@@ -36,7 +42,7 @@ namespace Loadout
             #region clothing
 
             PlayerClothing clo = player.Player.clothing;
-            LoadoutClothes clothes = Loadout.instance.inventories[player.CSteamID].clothes;
+            LoadoutClothes clothes = Loadout.instance.playerInvs[player.CSteamID]._invs[command[0]].clothes;
 
             LoadoutHat hat = clothes.hat;
             LoadoutMask mask = clothes.mask;
@@ -56,9 +62,9 @@ namespace Loadout
 
             #region items
 
-            for (int i = 0; i < Loadout.instance.inventories[player.CSteamID].items.Count; i++)
+            for (int i = 0; i < Loadout.instance.playerInvs[player.CSteamID]._invs[command[0]].items.Count; i++)
             {
-                LoadoutItem item = Loadout.instance.inventories[player.CSteamID].items[i];
+                LoadoutItem item = Loadout.instance.playerInvs[player.CSteamID]._invs[command[0]].items[i];
                 Item item2 = new Item(item.id, true)
                 {
                     metadata = item.meta

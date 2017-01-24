@@ -27,58 +27,72 @@ namespace Loadout
         public void Execute(IRocketPlayer caller, string[] command)
         {
             #region vars
-
+            if (command.Length != 1)
+            {
+                UnturnedChat.Say(caller, Syntax);
+                return;
+            }
             UnturnedPlayer player = (UnturnedPlayer)caller;
 
-            CSteamID id = player.CSteamID;
+                CSteamID id = player.CSteamID;
 
-            List<LoadoutItem> itemList = new List<LoadoutItem>();
+                List<LoadoutItem> itemList = new List<LoadoutItem>();
 
-            PlayerClothing clo = player.Player.clothing;
+                PlayerClothing clo = player.Player.clothing;
 
-            #endregion vars
+                #endregion vars
 
-            #region items
+                #region items
 
-            for (byte p = 0; p < PlayerInventory.PAGES - 1; p++)
-            {
-                for (byte i = 0; i < player.Inventory.getItemCount(p); i++)
+                for (byte p = 0; p < PlayerInventory.PAGES - 1; p++)
                 {
-                    Item item = player.Inventory.getItem(p, i).item;
-                    itemList.Add(new LoadoutItem(item.id, item.metadata));
+                    for (byte i = 0; i < player.Inventory.getItemCount(p); i++)
+                    {
+                        Item item = player.Inventory.getItem(p, i).item;
+                        itemList.Add(new LoadoutItem(item.id, item.metadata));
+                    }
                 }
+
+                #endregion items
+
+                #region clothing
+
+                LoadoutHat hat = new LoadoutHat(clo.hat, clo.hatQuality, clo.hatState);
+                LoadoutMask mask = new LoadoutMask(clo.mask, clo.maskQuality, clo.maskState);
+                LoadoutShirt shirt = new LoadoutShirt(clo.shirt, clo.shirtQuality, clo.shirtState);
+                LoadoutVest vest = new LoadoutVest(clo.vest, clo.vestQuality, clo.vestState);
+                LoadoutBackpack backpack = new LoadoutBackpack(clo.backpack, clo.backpackQuality, clo.backpackState);
+                LoadoutPants pants = new LoadoutPants(clo.pants, clo.pantsQuality, clo.pantsState);
+
+                LoadoutClothes clothes = new LoadoutClothes(hat, mask, shirt, vest, backpack, pants);
+
+                #endregion clothing
+
+                #region dictionary
+
+                if (!Loadout.instance.playerInvs.ContainsKey(id))
+                {
+                    Loadout.instance.playerInvs.Add(id, new LoadoutList(new Dictionary<string, LoadoutInventory>()));
+                    Loadout.instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                    UnturnedChat.Say(caller, Loadout.instance.Translate("saved"));
+                }
+                else
+                {
+                    if (!Loadout.instance.playerInvs[id]._invs.ContainsKey(command[0]))
+                    {
+   
+                        Loadout.instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                        UnturnedChat.Say(caller, Loadout.instance.Translate("saved"));
+                    }
+                    else
+                    {
+                        Loadout.instance.playerInvs[id]._invs.Remove(command[0]);
+                        Loadout.instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                        UnturnedChat.Say(caller, Loadout.instance.Translate("replaced"));
+                    }
+                }
+
+                #endregion dictionary
             }
-
-            #endregion items
-
-            #region clothing
-
-            LoadoutHat hat = new LoadoutHat(clo.hat, clo.hatQuality, clo.hatState);
-            LoadoutMask mask = new LoadoutMask(clo.mask, clo.maskQuality, clo.maskState);
-            LoadoutShirt shirt = new LoadoutShirt(clo.shirt, clo.shirtQuality, clo.shirtState);
-            LoadoutVest vest = new LoadoutVest(clo.vest, clo.vestQuality, clo.vestState);
-            LoadoutBackpack backpack = new LoadoutBackpack(clo.backpack, clo.backpackQuality, clo.backpackState);
-            LoadoutPants pants = new LoadoutPants(clo.pants, clo.pantsQuality, clo.pantsState);
-
-            LoadoutClothes clothes = new LoadoutClothes(hat, mask, shirt, vest, backpack, pants);
-
-            #endregion clothing
-
-            #region dictionary
-
-            if (!Loadout.instance.inventories.ContainsKey(id))
-            {
-                Loadout.instance.inventories.Add(id, new LoadoutInventory(itemList, clothes));
-                UnturnedChat.Say(caller, Loadout.instance.Translate("saved"));
-            }
-            else
-            {
-                Loadout.instance.inventories.Remove(id);
-                Loadout.instance.inventories.Add(id, new LoadoutInventory(itemList, clothes));
-                UnturnedChat.Say(caller, Loadout.instance.Translate("replaced"));
-            }
-
-            #endregion dictionary
         }
     }
-}
