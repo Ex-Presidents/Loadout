@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Loadout
 {
-    public class Loadout : RocketPlugin
+    public class Loadout : RocketPlugin<Configuration>
     {
         public Dictionary<Steamworks.CSteamID, LoadoutInventory> inventories;
 
-        public static Loadout instance;
+        public static Loadout Instance;
 
         protected override void Load()
         {
