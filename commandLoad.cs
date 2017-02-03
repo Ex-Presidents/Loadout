@@ -33,18 +33,20 @@ namespace Loadout
                 return;
             }
 
-            if (!Loadout.instance.playerInvs[player.CSteamID]._invs.ContainsKey(command[0])) 
+            if (!Loadout.Instance.playerInvs[player.CSteamID]._invs.ContainsKey(command[0])) 
             {
-                UnturnedChat.Say(player, Loadout.instance.Translate("no_kit"));
+                UnturnedChat.Say(player, Loadout.Instance.Translate("no_kit"));
                 return;
             }
 
             #region clothing
 
             PlayerClothing clo = player.Player.clothing;
-            LoadoutClothes clothes = Loadout.instance.playerInvs[player.CSteamID]._invs[command[0]].clothes;
+            LoadoutClothes clothes = Loadout.Instance.playerInvs[player.CSteamID]._invs[command[0]].clothes;
 
+            
             LoadoutHat hat = clothes.hat;
+            LoadoutGlasses glasses = clothes.glasses;
             LoadoutMask mask = clothes.mask;
             LoadoutShirt shirt = clothes.shirt;
             LoadoutVest vest = clothes.vest;
@@ -52,6 +54,7 @@ namespace Loadout
             LoadoutPants pants = clothes.pants;
 
             if (hat != null) clo.askWearHat(hat.id, hat.quality, hat.state, true);
+            if (glasses != null) clo.askWearGlasses(glasses.id, glasses.quality, glasses.state, true);
             if (mask != null) clo.askWearMask(mask.id, mask.quality, mask.state, true);
             if (shirt != null) clo.askWearShirt(shirt.id, shirt.quality, shirt.state, true);
             if (vest != null) clo.askWearVest(vest.id, vest.quality, vest.state, true);
@@ -62,9 +65,9 @@ namespace Loadout
 
             #region items
 
-            for (int i = 0; i < Loadout.instance.playerInvs[player.CSteamID]._invs[command[0]].items.Count; i++)
+            for (int i = 0; i < Loadout.Instance.playerInvs[player.CSteamID]._invs[command[0]].items.Count; i++)
             {
-                LoadoutItem item = Loadout.instance.playerInvs[player.CSteamID]._invs[command[0]].items[i];
+                LoadoutItem item = Loadout.Instance.playerInvs[player.CSteamID]._invs[command[0]].items[i];
                 Item item2 = new Item(item.id, true)
                 {
                     metadata = item.meta
@@ -74,7 +77,7 @@ namespace Loadout
 
             #endregion items
 
-            UnturnedChat.Say(caller, Loadout.instance.Translate("loaded"));
+            UnturnedChat.Say(caller, Loadout.Instance.Translate("loaded"));
         }
     }
 }

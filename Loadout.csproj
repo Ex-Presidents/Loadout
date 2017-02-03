@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clothes\LoadoutGlasses.cs" />
     <Compile Include="clothes\LoadoutItem.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DBManager.cs" />
