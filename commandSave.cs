@@ -58,37 +58,38 @@ namespace Loadout
                 #region clothing
 
                 LoadoutHat hat = new LoadoutHat(clo.hat, clo.hatQuality, clo.hatState);
+                LoadoutGlasses glasses = new LoadoutGlasses(clo.glasses, clo.glassesQuality, clo.glassesState);
                 LoadoutMask mask = new LoadoutMask(clo.mask, clo.maskQuality, clo.maskState);
                 LoadoutShirt shirt = new LoadoutShirt(clo.shirt, clo.shirtQuality, clo.shirtState);
                 LoadoutVest vest = new LoadoutVest(clo.vest, clo.vestQuality, clo.vestState);
                 LoadoutBackpack backpack = new LoadoutBackpack(clo.backpack, clo.backpackQuality, clo.backpackState);
                 LoadoutPants pants = new LoadoutPants(clo.pants, clo.pantsQuality, clo.pantsState);
 
-                LoadoutClothes clothes = new LoadoutClothes(hat, mask, shirt, vest, backpack, pants);
+                LoadoutClothes clothes = new LoadoutClothes(hat, glasses,  mask, shirt, vest, backpack, pants);
 
                 #endregion clothing
 
                 #region dictionary
 
-                if (!Loadout.instance.playerInvs.ContainsKey(id))
+                if (!Loadout.Instance.playerInvs.ContainsKey(id))
                 {
-                    Loadout.instance.playerInvs.Add(id, new LoadoutList(new Dictionary<string, LoadoutInventory>()));
-                    Loadout.instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
-                    UnturnedChat.Say(caller, Loadout.instance.Translate("saved"));
+                    Loadout.Instance.playerInvs.Add(id, new LoadoutList(new Dictionary<string, LoadoutInventory>()));
+                    Loadout.Instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                    UnturnedChat.Say(caller, Loadout.Instance.Translate("saved"));
                 }
                 else
                 {
-                    if (!Loadout.instance.playerInvs[id]._invs.ContainsKey(command[0]))
+                    if (!Loadout.Instance.playerInvs[id]._invs.ContainsKey(command[0]))
                     {
    
-                        Loadout.instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
-                        UnturnedChat.Say(caller, Loadout.instance.Translate("saved"));
+                        Loadout.Instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                        UnturnedChat.Say(caller, Loadout.Instance.Translate("saved"));
                     }
                     else
                     {
-                        Loadout.instance.playerInvs[id]._invs.Remove(command[0]);
-                        Loadout.instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
-                        UnturnedChat.Say(caller, Loadout.instance.Translate("replaced"));
+                        Loadout.Instance.playerInvs[id]._invs.Remove(command[0]);
+                        Loadout.Instance.playerInvs[player.CSteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                        UnturnedChat.Say(caller, Loadout.Instance.Translate("replaced"));
                     }
                 }
 
