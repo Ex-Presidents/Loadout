@@ -10,7 +10,6 @@ namespace Loadout
     {
         public int DatabasePort;
         public string DatabaseName;
-        public string DatabaseTableName;
         public string DatabaseAddress;
         public string DatabaseUsername;
         public string DatabasePassword;
@@ -20,7 +19,6 @@ namespace Loadout
             DatabasePort = 3306;
             DatabaseAddress = "localhost";
             DatabaseName = "Unturned";
-            DatabaseTableName = "Loadout";
             DatabaseUsername = "admin";
             DatabasePassword = "admin";
         }
