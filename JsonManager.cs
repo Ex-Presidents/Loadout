@@ -34,7 +34,7 @@ namespace Loadout
 
 				ReadWrite.serializeJSON(Rocket.Core.Environment.PluginDirectory + "/loadout.json", false, loadouts);
 			}
-			catch { }'
+			catch { }
 		}
 	}
 }
