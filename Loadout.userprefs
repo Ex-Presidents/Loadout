@@ -1,14 +1,19 @@
 ﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Loadout.cs">
+    <Files>
+      <File FileName="commandLoad.cs" Line="48" Column="25" />
+      <File FileName="commandSave.cs" Line="54" Column="18" />
+      <File FileName="DBManager.cs" Line="1" Column="1" />
+      <File FileName="JsonManager.cs" Line="37" Column="13" />
+      <File FileName="LoadoutInventory.cs" Line="1" Column="1" />
+      <File FileName="Loadout.cs" Line="18" Column="13" />
+      <File FileName="Configuration.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="commandLoad.cs">
-    <Files>
-      <File FileName="commandLoad.cs" Line="48" Column="25" />
-      <File FileName="commandSave.cs" Line="54" Column="34" />
-      <File FileName="Properties\LoadoutItem.cs" Line="12" Column="21" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
 </Properties>

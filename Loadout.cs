@@ -15,9 +15,13 @@ namespace Loadout
         protected override void Load()
         {
             Instance = this;
-            Logger.LogWarning("\tPlugin Loadout Loaded Successfully");
-            playerInvs = new Dictionary<Steamworks.CSteamID, LoadoutList>();
+			Logger.Log(Rocket.Core.Environment.PluginsDirectory);
+			playerInvs = JsonManager.Deseralize();
         }
+		protected override void Unload()
+		{
+			JsonManager.Seralize(playerInvs);
+		}
 
         public override TranslationList DefaultTranslations
         {
@@ -32,5 +36,11 @@ namespace Loadout
                 };
             }
         }
+
+		void Start()
+		{
+			Logger.LogWarning("\tPlugin Loadout Loaded Successfully");//Load is before the gameobject is made here is A TRUE comment
+
+		}
     }
 }

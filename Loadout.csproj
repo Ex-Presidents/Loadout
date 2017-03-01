@@ -90,6 +90,7 @@
     <Compile Include="clothes\LoadoutHat.cs" />
     <Compile Include="clothes\LoadoutBackpack.cs" />
     <Compile Include="clothes\LoadoutMask.cs" />
+    <Compile Include="JsonManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
