@@ -1,109 +1,118 @@
 ﻿using System;
+using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
 using Logger = Rocket.Core.Logging.Logger;
 
-namespace Loadout
+namespace ExPresidents.Loadout
 {
     public class DBManager
     {
+        bool DebugMode;
+
+        #region Schemas
+
         public DBManager() { CheckSchema(); }
+
+        private void CheckSchema()
+        {
+            MySqlConnection Connection = CreateConnection();
+            if (DebugMode)
+                Logger.Log("MySql connection created.");
+            using (MySqlCommand Command = Connection.CreateCommand())
+            {
+                Connection.Open();
+
+                Command.CommandText = "show tables like 'loadout'";
+
+                if (Command.ExecuteScalar() == null)
+                {
+                    Command.CommandText = "CREATE TABLE `loadout`" +
+                        " (`servername` varchar(64) NOT NULL," +
+                        "`dictionary` BLOB NOT NULL);";
+                    Command.ExecuteNonQuery();
+                    if (DebugMode)
+                        Logger.Log("No loadout table found, created one.");
+                }
+                else
+                    if (DebugMode)
+                    Logger.Log("Loadout table found.");
+
+                Connection.Close();
+            }
+            Loadout.Instance.Connection = Connection;
+            DebugMode = Loadout.Instance.Configuration.Instance.DebugMode;
+        }
+
+        #endregion Schemas
+
+        #region Commands
+
+        private MySqlCommand SaveDictionaryCommand(MySqlConnection Connection, String ServerName)
+        {
+            MySqlCommand Cmd = Connection.CreateCommand();
+            Cmd.Parameters.AddWithValue("@servername", ServerName);
+            Cmd.Parameters.AddWithValue("@dictionary", BArrayManager.ToArray(Loadout.Instance.playerInvs));
+            Cmd.CommandText = "Insert into loadout " +
+                "(servername, dictionary) " +
+                "values " +
+                "(@servername, @dictionary);";
+            return Cmd;
+        }
+
+        private MySqlCommand UpdateDictionaryCommand(MySqlConnection Connection, String ServerName)
+        {
+            MySqlCommand Cmd = Connection.CreateCommand();
+            Cmd.Parameters.AddWithValue("@servername", ServerName);
+            Cmd.Parameters.AddWithValue("@dictionary", BArrayManager.ToArray(Loadout.Instance.playerInvs));
+            Cmd.CommandText = "Update loadout set dictionary = @dictionary where servername = @servername";
+            return Cmd;
+        }
+
+        #endregion Commands
 
         private MySqlConnection CreateConnection()
         {
             MySqlConnection connection = null;
-            try
-            {
-                connection = new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", Loadout.Instance.Configuration.Instance.DatabaseAddress, Loadout.Instance.Configuration.Instance.DatabaseName, Loadout.Instance.Configuration.Instance.DatabaseUsername, Loadout.Instance.Configuration.Instance.DatabasePassword, Loadout.Instance.Configuration.Instance.DatabasePort));
-            }
-            catch (Exception ex) { Logger.LogException(ex); }
+
+            connection = new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", Loadout.Instance.Configuration.Instance.DatabaseAddress, Loadout.Instance.Configuration.Instance.DatabaseName, Loadout.Instance.Configuration.Instance.DatabaseUsername, Loadout.Instance.Configuration.Instance.DatabasePassword, Loadout.Instance.Configuration.Instance.DatabasePort));
 
             return connection;
         }
 
-        public void CheckSchema()
+        public void SaveDictionary(MySqlConnection Connection, String ServerName)
         {
-            try
+            Dictionary<ulong, LoadoutList> Dictionary = Loadout.Instance.playerInvs;
+
+            Connection.Open();
+            using (MySqlCommand Cmd = UpdateDictionaryCommand(Connection, ServerName))
             {
-                using (MySqlConnection connection = CreateConnection())
+                if (Cmd.ExecuteNonQuery() == 0)
                 {
-                    using(MySqlCommand command = connection.CreateCommand())
-                    {
-                        command.CommandText = "show tables like 'loadouts'";
-                        connection.Open();
-
-                        if (command.ExecuteScalar() == null)
-                        {
-                            command.CommandText = "CREATE TABLE `loadouts`" +
-                                " (`id` INT NOT NULL AUTO INCREMENT," +
-                                "`name` varchar(15) NOT NULL," +
-                                "`steamId` varchar(32) NOT NULL);";
-                            command.ExecuteNonQuery();
-                        }
-                        command.CommandText = "show tables like 'loadoutclothing'";
-
-                        if(command.ExecuteScalar() == null)
-                        {
-                            command.CommandText = "CREATE TABLE `loadoutclothing`" +
-                                " (`id` INT NOT NULL," +
-                                "`type` varchar(8) NOT NULL," +
-                                "`kitid` INT NOT NULL," +
-                                "`quality` INT NOT NULL," +
-                                "`state` INT NOT NULL);";
-                            command.ExecuteNonQuery();
-                        }
-                        command.CommandText = "show tables like 'loadoutitems'";
-
-                        if(command.ExecuteScalar() == null)
-                        {
-                            command.CommandText = "CREATE TABLE `loadoutitems`" +
-                                " (`id` INT NOT NULL," +
-                                "`kitid` INT NOT NULL," +
-                                "`meta` INT NOT NULL);";
-                            command.ExecuteNonQuery();
-                        }
-                        connection.Close();
-                    }
+                    using (MySqlCommand Command = SaveDictionaryCommand(Connection, ServerName))
+                        Command.ExecuteNonQuery();
+                    if (DebugMode)
+                        Logger.Log("No dictionary for " + ServerName + " found, creating one.");
                 }
+                Logger.Log("Dictionary saved for " + ServerName + ".");
             }
-            catch (Exception ex) { Logger.LogException(ex);  }
+            Connection.Close();
         }
 
-        public void SaveLoadouts(ulong steamID, string name) // unfinished
+        public void LoadDictionary(MySqlConnection Connection, String ServerName)
         {
-            try
+            using(MySqlCommand Cmd = Connection.CreateCommand())
             {
-                using (MySqlConnection Connection = CreateConnection())
+                Connection.Open();
+                Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
+                object Result = Cmd.ExecuteNonQuery();
+                MySqlDataReader Reader = Cmd.ExecuteReader();
+                if (Reader.HasRows)
                 {
-                    using (MySqlCommand Cmd = Connection.CreateCommand())
-                    {
-                        Cmd.CommandText = "Insert into loadouts " +
-                            "(id, name, steamid) " +
-                            "values " +
-                            "(1, 'cuckoo', 2);";
-                        Connection.Open();
-                        Cmd.ExecuteNonQuery();
-                        Connection.Close();
-                    }
+                    if (Reader.Read())
+                        Loadout.Instance.playerInvs = Reader.GetValue(1) as Dictionary<ulong, LoadoutList>;
                 }
             }
-            catch(Exception ex){ Logger.LogException(ex); }
-        }
-
-        public void LoadLoadouts(ulong steamID) // unfinished
-        {
-            try
-            {
-                using (MySqlConnection Connection = CreateConnection())
-                {
-                    using (MySqlCommand Cmd = Connection.CreateCommand())
-                    {
-                        Connection.Open();
-                        Cmd.CommandText = "Select ";
-                    }
-                }
-            }
-            catch (Exception ex){ Logger.LogException(ex); }
         }
     }
 }

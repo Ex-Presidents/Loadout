@@ -7,7 +7,7 @@
     <ProjectGuid>{BA8A3D8D-5A9B-4D0D-90D8-6284FF0A5393}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Loadout</RootNamespace>
+    <RootNamespace>ExPresidents.Loadout</RootNamespace>
     <AssemblyName>Loadout</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -73,8 +73,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BArrayManager.cs" />
     <Compile Include="clothes\LoadoutGlasses.cs" />
     <Compile Include="clothes\LoadoutItem.cs" />
+    <Compile Include="commandStore.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DBManager.cs" />
     <Compile Include="Loadout.cs" />

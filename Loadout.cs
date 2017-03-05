@@ -1,22 +1,41 @@
 ﻿using Rocket.API.Collections;
 using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
-using Steamworks;
 using System.Collections.Generic;
+using MySql.Data.MySqlClient;
+using System;
 
-namespace Loadout
+namespace ExPresidents.Loadout
 {
     public class Loadout : RocketPlugin<Configuration>
     {
-       // public Dictionary<Steamworks.CSteamID, LoadoutInventory> inventories;
-        public Dictionary <CSteamID, LoadoutList> playerInvs;
+        public Dictionary <ulong, LoadoutList> playerInvs;
         public static Loadout Instance;
+        public MySqlConnection Connection;
+        public DBManager DB;
 
         protected override void Load()
         {
             Instance = this;
-            Logger.LogWarning("\tPlugin Loadout Loaded Successfully");
-            playerInvs = new Dictionary<Steamworks.CSteamID, LoadoutList>();
+            playerInvs = new Dictionary<ulong, LoadoutList>();
+            try
+            {
+                DB = new DBManager();
+                DB.LoadDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
+            }
+            catch(Exception ex) { Logger.LogException(ex); }
+            Logger.LogWarning("\tPlugin Loadout loaded successfully.");
+        }
+
+        protected override void Unload()
+        {
+            try
+            {
+                DB.SaveDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
+            }
+            catch(Exception ex) { Logger.LogException(ex); }
+
+            Logger.Log("\tPlugin Loadout unloaded successfully.");
         }
 
         public override TranslationList DefaultTranslations
@@ -28,7 +47,8 @@ namespace Loadout
                     {"no_kit", "You have no kits saved!"},
                     {"loaded", "Loaded kit successfully!"},
                     {"saved", "Saved kit successfully!"},
-                    {"replaced", "Replaced kit successfully!" }
+                    {"replaced", "Replaced kit successfully!" },
+                    {"syntax", "You used this command with invalid syntax." }
                 };
             }
         }

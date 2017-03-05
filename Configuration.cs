@@ -1,10 +1,6 @@
 ﻿using Rocket.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Loadout
+namespace ExPresidents.Loadout
 {
     public class Configuration : IRocketPluginConfiguration
     {
@@ -13,6 +9,7 @@ namespace Loadout
         public string DatabaseAddress;
         public string DatabaseUsername;
         public string DatabasePassword;
+        public bool DebugMode;
 
         public void LoadDefaults()
         {
@@ -21,6 +18,7 @@ namespace Loadout
             DatabaseName = "Unturned";
             DatabaseUsername = "admin";
             DatabasePassword = "admin";
+            DebugMode = true;
         }
     }
 }

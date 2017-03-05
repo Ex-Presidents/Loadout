@@ -2,10 +2,9 @@
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
-using System;
 using System.Collections.Generic;
 
-namespace Loadout
+namespace ExPresidents.Loadout
 {
     public class CommandLoad : IRocketCommand
     {
@@ -33,7 +32,7 @@ namespace Loadout
                 return;
             }
 
-            if (!Loadout.Instance.playerInvs[player.CSteamID]._invs.ContainsKey(command[0])) 
+            if (!Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs.ContainsKey(command[0])) 
             {
                 UnturnedChat.Say(player, Loadout.Instance.Translate("no_kit"));
                 return;
@@ -42,7 +41,7 @@ namespace Loadout
             #region clothing
 
             PlayerClothing clo = player.Player.clothing;
-            LoadoutClothes clothes = Loadout.Instance.playerInvs[player.CSteamID]._invs[command[0]].clothes;
+            LoadoutClothes clothes = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].clothes;
 
             
             LoadoutHat hat = clothes.hat;
@@ -65,9 +64,9 @@ namespace Loadout
 
             #region items
 
-            for (int i = 0; i < Loadout.Instance.playerInvs[player.CSteamID]._invs[command[0]].items.Count; i++)
+            for (int i = 0; i < Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].items.Count; i++)
             {
-                LoadoutItem item = Loadout.Instance.playerInvs[player.CSteamID]._invs[command[0]].items[i];
+                LoadoutItem item = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].items[i];
                 Item item2 = new Item(item.id, true)
                 {
                     metadata = item.meta

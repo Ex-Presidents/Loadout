@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Loadout
+namespace ExPresidents.Loadout
 {
     public class LoadoutInventory
     {
@@ -14,23 +14,15 @@ namespace Loadout
             this.items = items;
             this.clothes = clothes;
         }
-
-
-
-
     }
 
     public class LoadoutList
     {
-
-        
         public Dictionary<string, LoadoutInventory> _invs;
-
         
         public LoadoutList(Dictionary<string, LoadoutInventory> z)
         {
             this._invs = z;
         }
-
     }
 }
