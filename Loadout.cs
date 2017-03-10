@@ -31,7 +31,8 @@ namespace ExPresidents.Loadout
         {
             try
             {
-                DB.SaveDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
+                if (playerInvs != null)
+                    DB.SaveDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
             }
             catch(Exception ex) { Logger.LogException(ex); }
 
@@ -48,7 +49,8 @@ namespace ExPresidents.Loadout
                     {"loaded", "Loaded kit successfully!"},
                     {"saved", "Saved kit successfully!"},
                     {"replaced", "Replaced kit successfully!" },
-                    {"syntax", "You used this command with invalid syntax." }
+                    {"syntax", "You used this command with invalid syntax." },
+                    {"null", "Dictionary is null, nothing to save." }
                 };
             }
         }

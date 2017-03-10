@@ -37,7 +37,15 @@ namespace ExPresidents.Loadout
                 else
                     UnturnedChat.Say(caller, Loadout.Instance.Translate("syntax"));
             }
-            Loadout.Instance.DB.SaveDictionary(Loadout.Instance.Connection, SDG.Unturned.Provider.ip.ToString());
+            if(Loadout.Instance.playerInvs == null)
+            {
+                if (caller.Id == "Console")
+                    Logger.Log(Loadout.Instance.Translate("null"));
+                else
+                    UnturnedChat.Say(caller, Loadout.Instance.Translate("null"));
+                return;
+            }
+            Loadout.Instance.DB.SaveDictionary(Loadout.Instance.Connection, Provider.ip.ToString());
         }
     }
 }
