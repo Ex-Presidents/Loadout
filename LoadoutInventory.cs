@@ -15,7 +15,8 @@ namespace ExPresidents.Loadout
             this.clothes = clothes;
         }
     }
-
+    
+    [Serializable]
     public class LoadoutList
     {
         public Dictionary<string, LoadoutInventory> _invs;
