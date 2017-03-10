@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
@@ -19,10 +19,11 @@ namespace ExPresidents.Loadout
             MySqlConnection Connection = CreateConnection();
             if (DebugMode)
                 Logger.Log("MySql connection created.");
+
+            Connection.Open();
+
             using (MySqlCommand Command = Connection.CreateCommand())
             {
-                Connection.Open();
-
                 Command.CommandText = "show tables like 'loadout'";
 
                 if (Command.ExecuteScalar() == null)
@@ -37,9 +38,8 @@ namespace ExPresidents.Loadout
                 else
                     if (DebugMode)
                     Logger.Log("Loadout table found.");
-
-                Connection.Close();
             }
+            Connection.Close();
             Loadout.Instance.Connection = Connection;
             DebugMode = Loadout.Instance.Configuration.Instance.DebugMode;
         }
@@ -101,9 +101,9 @@ namespace ExPresidents.Loadout
 
         public void LoadDictionary(MySqlConnection Connection, String ServerName)
         {
-            using(MySqlCommand Cmd = Connection.CreateCommand())
+            Connection.Open();
+            using (MySqlCommand Cmd = Connection.CreateCommand())
             {
-                Connection.Open();
                 Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
                 object Result = Cmd.ExecuteNonQuery();
                 MySqlDataReader Reader = Cmd.ExecuteReader();
@@ -113,6 +113,7 @@ namespace ExPresidents.Loadout
                         Loadout.Instance.playerInvs = Reader.GetValue(1) as Dictionary<ulong, LoadoutList>;
                 }
             }
+            Connection.Close();
         }
     }
 }
