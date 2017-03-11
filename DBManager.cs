@@ -115,5 +115,24 @@ namespace ExPresidents.Loadout
             }
             Connection.Close();
         }
+
+        public bool CheckDictionary(MySqlConnection Connection, String ServerName)
+        {
+            Connection.Open();
+            using (MySqlCommand Cmd = Connection.CreateCommand())
+            {
+                Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
+                object Result = Cmd.ExecuteNonQuery();
+                MySqlDataReader Reader = Cmd.ExecuteReader();
+                if (Reader.HasRows)
+                {
+                    if (Reader.Read())
+                        if (Reader.GetValue(1) == null)
+                            return false;
+                }
+            }
+            Connection.Close();
+            return true;
+        }
     }
 }

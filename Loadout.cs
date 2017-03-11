@@ -9,21 +9,29 @@ namespace ExPresidents.Loadout
 {
     public class Loadout : RocketPlugin<Configuration>
     {
+        #region Fields
+
         public Dictionary <ulong, LoadoutList> playerInvs;
         public static Loadout Instance;
         public MySqlConnection Connection;
         public DBManager DB;
 
+        #endregion Fields
+
         protected override void Load()
         {
             Instance = this;
-            playerInvs = new Dictionary<ulong, LoadoutList>();
-            try
+            if (!DB.CheckDictionary(Connection, SDG.Unturned.Provider.ip.ToString()))
+                playerInvs = new Dictionary<ulong, LoadoutList>();
+            else
             {
-                DB = new DBManager();
-                DB.LoadDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
+                try
+                {
+                    DB = new DBManager();
+                    DB.LoadDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
+                }
+                catch (Exception ex) { Logger.LogException(ex); }
             }
-            catch(Exception ex) { Logger.LogException(ex); }
             Logger.LogWarning("\tPlugin Loadout loaded successfully.");
         }
 
@@ -33,6 +41,7 @@ namespace ExPresidents.Loadout
             {
                 if (playerInvs != null)
                     DB.SaveDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
+                Connection.Dispose();
             }
             catch(Exception ex) { Logger.LogException(ex); }
 
