@@ -44,13 +44,13 @@ namespace ExPresidents.Loadout
             LoadoutClothes clothes = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].clothes;
 
             
-            LoadoutHat hat = clothes.hat;
-            LoadoutGlasses glasses = clothes.glasses;
-            LoadoutMask mask = clothes.mask;
-            LoadoutShirt shirt = clothes.shirt;
-            LoadoutVest vest = clothes.vest;
-            LoadoutBackpack backpack = clothes.backpack;
-            LoadoutPants pants = clothes.pants;
+            LoadoutClothing hat = clothes.hat;
+            LoadoutClothing glasses = clothes.glasses;
+            LoadoutClothing mask = clothes.mask;
+            LoadoutClothing shirt = clothes.shirt;
+            LoadoutClothing vest = clothes.vest;
+            LoadoutClothing backpack = clothes.backpack;
+            LoadoutClothing pants = clothes.pants;
 
             if (hat != null) clo.askWearHat(hat.id, hat.quality, hat.state, true);
             if (glasses != null) clo.askWearGlasses(glasses.id, glasses.quality, glasses.state, true);
@@ -66,10 +66,10 @@ namespace ExPresidents.Loadout
 
             for (int i = 0; i < Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].items.Count; i++)
             {
-                LoadoutItem item = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].items[i];
+                Item item = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].items[i];
                 Item item2 = new Item(item.id, true)
                 {
-                    metadata = item.meta
+                    metadata = item.metadata
                 };
                 player.Inventory.tryAddItem(item2, true);
             }

@@ -75,8 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BArrayManager.cs" />
-    <Compile Include="clothes\LoadoutGlasses.cs" />
-    <Compile Include="clothes\LoadoutItem.cs" />
     <Compile Include="Commands\commandStore.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DBManager.cs" />
@@ -86,13 +84,7 @@
     <Compile Include="Commands\commandLoad.cs" />
     <Compile Include="LoadoutInventory.cs" />
     <Compile Include="clothes\LoadoutClothes.cs" />
-    <Compile Include="clothes\LoadoutShirt.cs" />
     <Compile Include="clothes\LoadoutClothing.cs" />
-    <Compile Include="clothes\LoadoutPants.cs" />
-    <Compile Include="clothes\LoadoutVest.cs" />
-    <Compile Include="clothes\LoadoutHat.cs" />
-    <Compile Include="clothes\LoadoutBackpack.cs" />
-    <Compile Include="clothes\LoadoutMask.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />

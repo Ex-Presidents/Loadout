@@ -3,15 +3,15 @@ namespace ExPresidents.Loadout
 {
 	public class LoadoutClothes
 	{
-		public LoadoutHat hat;
-        public LoadoutGlasses glasses;
-		public LoadoutMask mask;
-		public LoadoutShirt shirt;
-		public LoadoutVest vest;
-		public LoadoutBackpack backpack;
-		public LoadoutPants pants;
+		public LoadoutClothing hat;
+        public LoadoutClothing glasses;
+		public LoadoutClothing mask;
+		public LoadoutClothing shirt;
+		public LoadoutClothing vest;
+		public LoadoutClothing backpack;
+		public LoadoutClothing pants;
 
-		public LoadoutClothes(LoadoutHat hat, LoadoutGlasses glasses , LoadoutMask mask, LoadoutShirt shirt, LoadoutVest vest, LoadoutBackpack backpack, LoadoutPants pants)
+		public LoadoutClothes(LoadoutClothing hat, LoadoutClothing glasses , LoadoutClothing mask, LoadoutClothing shirt, LoadoutClothing vest, LoadoutClothing backpack, LoadoutClothing pants)
 		{
 			this.hat = hat;
             this.glasses = glasses;

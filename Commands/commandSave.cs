@@ -37,7 +37,7 @@ namespace ExPresidents.Loadout
 
             ulong id = player.CSteamID.m_SteamID;
 
-            List<LoadoutItem> itemList = new List<LoadoutItem>();
+            List<Item> itemList = new List<Item>();
 
             PlayerClothing clo = player.Player.clothing;
 
@@ -63,7 +63,7 @@ namespace ExPresidents.Loadout
                             continue;
                         }
                     }
-                    itemList.Add(new LoadoutItem(item.id, item.metadata));
+                    itemList.Add(item);
                 }
             }
 
@@ -77,13 +77,13 @@ namespace ExPresidents.Loadout
 
             #region clothing
 
-            LoadoutHat hat = new LoadoutHat(clo.hat, clo.hatQuality, clo.hatState);
-            LoadoutGlasses glasses = new LoadoutGlasses(clo.glasses, clo.glassesQuality, clo.glassesState);
-            LoadoutMask mask = new LoadoutMask(clo.mask, clo.maskQuality, clo.maskState);
-            LoadoutShirt shirt = new LoadoutShirt(clo.shirt, clo.shirtQuality, clo.shirtState);
-            LoadoutVest vest = new LoadoutVest(clo.vest, clo.vestQuality, clo.vestState);
-            LoadoutBackpack backpack = new LoadoutBackpack(clo.backpack, clo.backpackQuality, clo.backpackState);
-            LoadoutPants pants = new LoadoutPants(clo.pants, clo.pantsQuality, clo.pantsState);
+            LoadoutClothing hat = new LoadoutClothing(clo.hat, clo.hatQuality, clo.hatState);
+            LoadoutClothing glasses = new LoadoutClothing(clo.glasses, clo.glassesQuality, clo.glassesState);
+            LoadoutClothing mask = new LoadoutClothing(clo.mask, clo.maskQuality, clo.maskState);
+            LoadoutClothing shirt = new LoadoutClothing(clo.shirt, clo.shirtQuality, clo.shirtState);
+            LoadoutClothing vest = new LoadoutClothing(clo.vest, clo.vestQuality, clo.vestState);
+            LoadoutClothing backpack = new LoadoutClothing(clo.backpack, clo.backpackQuality, clo.backpackState);
+            LoadoutClothing pants = new LoadoutClothing(clo.pants, clo.pantsQuality, clo.pantsState);
 
             LoadoutClothes clothes = new LoadoutClothes(hat, glasses, mask, shirt, vest, backpack, pants);
 

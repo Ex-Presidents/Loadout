@@ -1,16 +1,17 @@
 ﻿using System;
+using SDG.Unturned;
 using System.Collections.Generic;
 
 namespace ExPresidents.Loadout
 {
     public class LoadoutInventory
     {
-        public List<LoadoutItem> items;
+        public List<Item> items;
         public LoadoutClothes clothes;
 
         
 
-        public LoadoutInventory(List<LoadoutItem> items, LoadoutClothes clothes)
+        public LoadoutInventory(List<Item> items, LoadoutClothes clothes)
         {
             this.items = items;
             this.clothes = clothes;
