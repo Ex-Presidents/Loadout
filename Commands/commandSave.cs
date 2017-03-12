@@ -50,8 +50,27 @@ namespace ExPresidents.Loadout
                 for (byte i = 0; i < player.Inventory.getItemCount(p); i++)
                 {
                     Item item = player.Inventory.getItem(p, i).item;
+                    if (Loadout.Instance.Configuration.Instance.ItemBlacklist.Contains(item.id))
+                    {
+                        if (Loadout.Instance.Configuration.Instance.DenyOnBlacklist)
+                        {
+                            UnturnedChat.Say(caller, Loadout.Instance.Translate("denied", item.id));
+                            return;
+                        }
+                        else
+                        {
+                            UnturnedChat.Say(caller, Loadout.Instance.Translate("blacklisted", item.id));
+                            continue;
+                        }
+                    }
                     itemList.Add(new LoadoutItem(item.id, item.metadata));
                 }
+            }
+
+            if(itemList.Count > Loadout.Instance.Configuration.Instance.ItemLimit)
+            {
+                UnturnedChat.Say(caller, Loadout.Instance.Translate("too_much", Loadout.Instance.Configuration.Instance.ItemLimit, itemList.Count));
+                return;
             }
 
             #endregion items

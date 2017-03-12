@@ -59,7 +59,10 @@ namespace ExPresidents.Loadout
                     {"saved", "Saved kit successfully!"},
                     {"replaced", "Replaced kit successfully!" },
                     {"syntax", "You used this command with invalid syntax." },
-                    {"null", "Dictionary is null, nothing to save." }
+                    {"null", "Dictionary is null, nothing to save." },
+                    {"denied", "Item {0} is blacklisted. Your kit has not been saved." },
+                    {"blacklisted", "Item {0} is blacklisted. This particular item was not saved." },
+                    {"too_much", "Item limit is {0}, you tried to save {1} items. Your kit has not been saved." }
                 };
             }
         }

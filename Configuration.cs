@@ -1,4 +1,6 @@
 ﻿using Rocket.API;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ExPresidents.Loadout
 {
@@ -10,6 +12,10 @@ namespace ExPresidents.Loadout
         public string DatabaseUsername;
         public string DatabasePassword;
         public bool DebugMode;
+        public int ItemLimit;
+        [XmlArrayItem(ElementName = "Item")]
+        public List<ushort> ItemBlacklist;
+        public bool DenyOnBlacklist;
 
         public void LoadDefaults()
         {
@@ -19,6 +25,13 @@ namespace ExPresidents.Loadout
             DatabaseUsername = "admin";
             DatabasePassword = "admin";
             DebugMode = true;
+            ItemLimit = 100;
+            ItemBlacklist = new List<ushort>()
+            {
+                520,
+                1394
+            };
+            DenyOnBlacklist = false;
         }
     }
 }
