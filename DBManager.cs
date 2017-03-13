@@ -42,7 +42,6 @@ namespace ExPresidents.Loadout
             }
             Connection.Close();
             Loadout.Instance.Connection = Connection;
-            DebugMode = Loadout.Instance.Configuration.Instance.DebugMode;
         }
 
         #endregion Schemas
@@ -74,11 +73,7 @@ namespace ExPresidents.Loadout
 
         private MySqlConnection CreateConnection()
         {
-            MySqlConnection connection = null;
-
-            connection = new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", Loadout.Instance.Configuration.Instance.DatabaseAddress, Loadout.Instance.Configuration.Instance.DatabaseName, Loadout.Instance.Configuration.Instance.DatabaseUsername, Loadout.Instance.Configuration.Instance.DatabasePassword, Loadout.Instance.Configuration.Instance.DatabasePort));
-
-            return connection;
+            return new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", Loadout.Instance.Configuration.Instance.DatabaseAddress, Loadout.Instance.Configuration.Instance.DatabaseName, Loadout.Instance.Configuration.Instance.DatabaseUsername, Loadout.Instance.Configuration.Instance.DatabasePassword, Loadout.Instance.Configuration.Instance.DatabasePort));
         }
 
         public void SaveDictionary(MySqlConnection Connection, String ServerName)
@@ -119,6 +114,7 @@ namespace ExPresidents.Loadout
 
         public bool CheckDictionary(MySqlConnection Connection, String ServerName)
         {
+            bool retval;
             Connection.Open();
             using (MySqlCommand Cmd = Connection.CreateCommand())
             {
@@ -126,10 +122,12 @@ namespace ExPresidents.Loadout
                 object Result = Cmd.ExecuteNonQuery();
                 MySqlDataReader Reader = Cmd.ExecuteReader();
                 if (!Reader.HasRows)
-                    return false;
+                    retval = false;
+                else
+                    retval = true;
             }
             Connection.Close();
-            return true;
+            return retval;
         }
     }
 }
