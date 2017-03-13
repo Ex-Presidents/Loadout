@@ -4,6 +4,8 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System.Collections.Generic;
 
+using Logger = Rocket.Core.Logging.Logger;
+
 namespace ExPresidents.Loadout
 {
     public class CommandSave : IRocketCommand
@@ -41,9 +43,14 @@ namespace ExPresidents.Loadout
 
             PlayerClothing clo = player.Player.clothing;
 
+            bool DebugMode = Loadout.Instance.Configuration.Instance.DebugMode;
+
             #endregion vars
 
             #region items
+
+            if (DebugMode)
+                Logger.Log("Beginning item saves");
 
             for (byte p = 0; p < PlayerInventory.PAGES - 1; p++)
             {
@@ -67,15 +74,28 @@ namespace ExPresidents.Loadout
                 }
             }
 
+            if (DebugMode)
+                Logger.Log("Beginning blacklist check");
+
             if(itemList.Count > Loadout.Instance.Configuration.Instance.ItemLimit)
             {
                 UnturnedChat.Say(caller, Loadout.Instance.Translate("too_much", Loadout.Instance.Configuration.Instance.ItemLimit, itemList.Count));
                 return;
             }
 
+            if (DebugMode)
+            {
+                Logger.Log("Item saves complete");
+                if (itemList == null)
+                    Logger.Log("Null");
+            }
+
             #endregion items
 
             #region clothing
+
+            if (DebugMode)
+                Logger.Log("Beginning clothing save");
 
             LoadoutClothing hat = new LoadoutClothing(clo.hat, clo.hatQuality, clo.hatState);
             LoadoutClothing glasses = new LoadoutClothing(clo.glasses, clo.glassesQuality, clo.glassesState);
@@ -87,29 +107,54 @@ namespace ExPresidents.Loadout
 
             LoadoutClothes clothes = new LoadoutClothes(hat, glasses, mask, shirt, vest, backpack, pants);
 
+            if (DebugMode)
+            {
+                Logger.Log("Clothing save complete");
+                if (clothes == null)
+                    Logger.Log("Null");
+            }
+
             #endregion clothing
 
             #region dictionary
 
+            if (DebugMode)
+            {
+                Logger.Log("Beginning final dictionary save");
+                if (Loadout.Instance.playerInvs == null)
+                    Logger.Log("Null");
+            }
+
             if (!Loadout.Instance.playerInvs.ContainsKey(id))
             {
                 Loadout.Instance.playerInvs.Add(id, new LoadoutList(new Dictionary<string, LoadoutInventory>()));
-                Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                Loadout.Instance.playerInvs[id]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
                 UnturnedChat.Say(caller, Loadout.Instance.Translate("saved"));
+
+                if (DebugMode)
+                    Logger.Log("Player has no saves, adding to dictionary");
             }
             else
             {
+                if (DebugMode)
+                    Logger.Log("Player has saves");
+
                 if (!Loadout.Instance.playerInvs[id]._invs.ContainsKey(command[0]))
                 {
-
-                    Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                    Loadout.Instance.playerInvs[id]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
                     UnturnedChat.Say(caller, Loadout.Instance.Translate("saved"));
+
+                    if (DebugMode)
+                        Logger.Log("Player saved a unique kit");
                 }
                 else
                 {
                     Loadout.Instance.playerInvs[id]._invs.Remove(command[0]);
-                    Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                    Loadout.Instance.playerInvs[id]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
                     UnturnedChat.Say(caller, Loadout.Instance.Translate("replaced"));
+
+                    if (DebugMode)
+                        Logger.Log("Player has replaced a kit");
                 }
             }
 

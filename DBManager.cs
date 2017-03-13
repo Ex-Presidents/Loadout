@@ -17,6 +17,7 @@ namespace ExPresidents.Loadout
         private void CheckSchema()
         {
             MySqlConnection Connection = CreateConnection();
+            DebugMode = Loadout.Instance.Configuration.Instance.DebugMode;
             if (DebugMode)
                 Logger.Log("MySql connection created.");
 
@@ -124,12 +125,8 @@ namespace ExPresidents.Loadout
                 Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
                 object Result = Cmd.ExecuteNonQuery();
                 MySqlDataReader Reader = Cmd.ExecuteReader();
-                if (Reader.HasRows)
-                {
-                    if (Reader.Read())
-                        if (Reader.GetValue(1) == null)
-                            return false;
-                }
+                if (!Reader.HasRows)
+                    return false;
             }
             Connection.Close();
             return true;
