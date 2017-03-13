@@ -2,7 +2,6 @@
 using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
 using System;
 
 namespace ExPresidents.Loadout
@@ -13,7 +12,6 @@ namespace ExPresidents.Loadout
 
         public Dictionary <ulong, LoadoutList> playerInvs;
         public static Loadout Instance;
-        public MySqlConnection Connection;
         public DBManager DB;
         private bool DebugMode;
 
@@ -27,7 +25,7 @@ namespace ExPresidents.Loadout
                 Logger.Log("Initializing database.");
             try { DB = new DBManager(); }
             catch (Exception ex) { Logger.LogException(ex); }
-            if (!DB.CheckDictionary(Connection, SDG.Unturned.Provider.ip.ToString()))
+            if (!DB.CheckDictionary(SDG.Unturned.Provider.ip.ToString()))
             {
                 playerInvs = new Dictionary<ulong, LoadoutList>();
                 if (DebugMode)
@@ -37,7 +35,7 @@ namespace ExPresidents.Loadout
             {
                 if (DebugMode)
                     Logger.Log("Dictionary found, attempting to load it.");
-                try {  DB.LoadDictionary(Connection, SDG.Unturned.Provider.ip.ToString()); }
+                try {  DB.LoadDictionary(SDG.Unturned.Provider.ip.ToString()); }
                 catch (Exception ex) { Logger.LogException(ex); }
             }
             Logger.LogWarning("\tPlugin Loadout loaded successfully.");
@@ -48,8 +46,7 @@ namespace ExPresidents.Loadout
             try
             {
                 if (playerInvs != null)
-                    DB.SaveDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
-                Connection.Dispose();
+                    DB.SaveDictionary(SDG.Unturned.Provider.ip.ToString());
             }
             catch(Exception ex) { Logger.LogException(ex); }
 

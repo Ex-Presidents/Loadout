@@ -1,6 +1,7 @@
 ﻿using System;
 namespace ExPresidents.Loadout
 {
+    [Serializable]
 	public class LoadoutClothes
 	{
 		public LoadoutClothing hat;

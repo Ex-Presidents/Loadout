@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace ExPresidents.Loadout
 {
+    [Serializable]
     public class LoadoutInventory
     {
         public List<Item> items;

@@ -1,6 +1,7 @@
 ﻿using System;
 namespace ExPresidents.Loadout
 {
+    [Serializable]
 	public class LoadoutClothing
 	{
 		public ushort id;

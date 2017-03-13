@@ -45,7 +45,7 @@ namespace ExPresidents.Loadout
                     UnturnedChat.Say(caller, Loadout.Instance.Translate("null"));
                 return;
             }
-            Loadout.Instance.DB.SaveDictionary(Loadout.Instance.Connection, Provider.ip.ToString());
+            Loadout.Instance.DB.SaveDictionary(Provider.ip.ToString());
         }
     }
 }

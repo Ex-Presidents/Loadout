@@ -16,32 +16,33 @@ namespace ExPresidents.Loadout
 
         private void CheckSchema()
         {
-            MySqlConnection Connection = CreateConnection();
-            DebugMode = Loadout.Instance.Configuration.Instance.DebugMode;
-            if (DebugMode)
-                Logger.Log("MySql connection created.");
-
-            Connection.Open();
-
-            using (MySqlCommand Command = Connection.CreateCommand())
+            using (MySqlConnection Connection = CreateConnection())
             {
-                Command.CommandText = "show tables like 'loadout'";
+                DebugMode = Loadout.Instance.Configuration.Instance.DebugMode;
+                if (DebugMode)
+                    Logger.Log("MySql connection created.");
 
-                if (Command.ExecuteScalar() == null)
+                Connection.Open();
+
+                using (MySqlCommand Command = Connection.CreateCommand())
                 {
-                    Command.CommandText = "CREATE TABLE `loadout`" +
-                        " (`servername` varchar(64) NOT NULL," +
-                        "`dictionary` BLOB NOT NULL);";
-                    Command.ExecuteNonQuery();
-                    if (DebugMode)
-                        Logger.Log("No loadout table found, created one.");
+                    Command.CommandText = "show tables like 'loadout'";
+
+                    if (Command.ExecuteScalar() == null)
+                    {
+                        Command.CommandText = "CREATE TABLE `loadout`" +
+                            " (`servername` varchar(64) NOT NULL," +
+                            "`dictionary` BLOB NOT NULL);";
+                        Command.ExecuteNonQuery();
+                        if (DebugMode)
+                            Logger.Log("No loadout table found, created one.");
+                    }
+                    else
+                        if (DebugMode)
+                        Logger.Log("Loadout table found.");
                 }
-                else
-                    if (DebugMode)
-                    Logger.Log("Loadout table found.");
+                Connection.Close();
             }
-            Connection.Close();
-            Loadout.Instance.Connection = Connection;
         }
 
         #endregion Schemas
@@ -76,58 +77,65 @@ namespace ExPresidents.Loadout
             return new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", Loadout.Instance.Configuration.Instance.DatabaseAddress, Loadout.Instance.Configuration.Instance.DatabaseName, Loadout.Instance.Configuration.Instance.DatabaseUsername, Loadout.Instance.Configuration.Instance.DatabasePassword, Loadout.Instance.Configuration.Instance.DatabasePort));
         }
 
-        public void SaveDictionary(MySqlConnection Connection, String ServerName)
+        public void SaveDictionary(String ServerName)
         {
-            Dictionary<ulong, LoadoutList> Dictionary = Loadout.Instance.playerInvs;
-
-            Connection.Open();
-            using (MySqlCommand Cmd = UpdateDictionaryCommand(Connection, ServerName))
+            using (MySqlConnection Connection = CreateConnection())
             {
-                if (Cmd.ExecuteNonQuery() == 0)
+                Connection.Open();
+                using (MySqlCommand Cmd = UpdateDictionaryCommand(Connection, ServerName))
                 {
-                    using (MySqlCommand Command = SaveDictionaryCommand(Connection, ServerName))
-                        Command.ExecuteNonQuery();
-                    if (DebugMode)
-                        Logger.Log("No dictionary for " + ServerName + " found, creating one.");
+                    if (Cmd.ExecuteNonQuery() == 0)
+                    {
+                        using (MySqlCommand Command = SaveDictionaryCommand(Connection, ServerName))
+                            Command.ExecuteNonQuery();
+                        if (DebugMode)
+                            Logger.Log("No dictionary for " + ServerName + " found, creating one.");
+                    }
+                    Logger.Log("Dictionary saved for " + ServerName + ".");
                 }
-                Logger.Log("Dictionary saved for " + ServerName + ".");
+                Connection.Close();
             }
-            Connection.Close();
         }
 
-        public void LoadDictionary(MySqlConnection Connection, String ServerName)
+        public void LoadDictionary(String ServerName)
         {
-            Connection.Open();
-            using (MySqlCommand Cmd = Connection.CreateCommand())
+            using (MySqlConnection Connection = CreateConnection())
             {
-                Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
-                object Result = Cmd.ExecuteNonQuery();
-                MySqlDataReader Reader = Cmd.ExecuteReader();
-                if (Reader.HasRows)
+                Connection.Open();
+                using (MySqlCommand Cmd = Connection.CreateCommand())
                 {
-                    if (Reader.Read())
-                        Loadout.Instance.playerInvs = Reader.GetValue(1) as Dictionary<ulong, LoadoutList>;
+                    Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
+                    object Result = Cmd.ExecuteNonQuery();
+                    MySqlDataReader Reader = Cmd.ExecuteReader();
+                    if (Reader.HasRows)
+                    {
+                        if (Reader.Read())
+                            Loadout.Instance.playerInvs = Reader.GetValue(1) as Dictionary<ulong, LoadoutList>;
+                    }
                 }
+                Connection.Close();
             }
-            Connection.Close();
         }
 
-        public bool CheckDictionary(MySqlConnection Connection, String ServerName)
+        public bool CheckDictionary(String ServerName)
         {
-            bool retval;
-            Connection.Open();
-            using (MySqlCommand Cmd = Connection.CreateCommand())
+            using (MySqlConnection Connection = CreateConnection())
             {
-                Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
-                object Result = Cmd.ExecuteNonQuery();
-                MySqlDataReader Reader = Cmd.ExecuteReader();
-                if (!Reader.HasRows)
-                    retval = false;
-                else
-                    retval = true;
+                bool retval;
+                Connection.Open();
+                using (MySqlCommand Cmd = Connection.CreateCommand())
+                {
+                    Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
+                    object Result = Cmd.ExecuteNonQuery();
+                    MySqlDataReader Reader = Cmd.ExecuteReader();
+                    if (!Reader.HasRows)
+                        retval = false;
+                    else
+                        retval = true;
+                }
+                Connection.Close();
+                return retval;
             }
-            Connection.Close();
-            return retval;
         }
     }
 }
