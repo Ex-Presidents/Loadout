@@ -15,21 +15,29 @@ namespace ExPresidents.Loadout
         public static Loadout Instance;
         public MySqlConnection Connection;
         public DBManager DB;
+        private bool DebugMode;
 
         #endregion Fields
 
         protected override void Load()
         {
             Instance = this;
+            DebugMode = Instance.Configuration.Instance.DebugMode;
+            if (DebugMode)
+                Logger.Log("Initializing database.");
+            try { DB = new DBManager(); }
+            catch (Exception ex) { Logger.LogException(ex); }
             if (!DB.CheckDictionary(Connection, SDG.Unturned.Provider.ip.ToString()))
+            {
                 playerInvs = new Dictionary<ulong, LoadoutList>();
+                if (DebugMode)
+                    Logger.Log("No dictionary found, creating one.");
+            }
             else
             {
-                try
-                {
-                    DB = new DBManager();
-                    DB.LoadDictionary(Connection, SDG.Unturned.Provider.ip.ToString());
-                }
+                if (DebugMode)
+                    Logger.Log("Dictionary found, attempting to load it.");
+                try {  DB.LoadDictionary(Connection, SDG.Unturned.Provider.ip.ToString()); }
                 catch (Exception ex) { Logger.LogException(ex); }
             }
             Logger.LogWarning("\tPlugin Loadout loaded successfully.");
