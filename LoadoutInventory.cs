@@ -22,11 +22,11 @@ namespace ExPresidents.Loadout
     [Serializable]
     public class LoadoutList
     {
-        public Dictionary<string, LoadoutInventory> _invs;
+        public Dictionary<string, LoadoutInventory> inventories;
         
-        public LoadoutList(Dictionary<string, LoadoutInventory> z)
+        public LoadoutList(Dictionary<string, LoadoutInventory> inventories)
         {
-            this._invs = z;
+            this.inventories = inventories;
         }
     }
 }

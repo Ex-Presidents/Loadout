@@ -128,7 +128,7 @@ namespace ExPresidents.Loadout
             if (!Loadout.Instance.playerInvs.ContainsKey(id))
             {
                 Loadout.Instance.playerInvs.Add(id, new LoadoutList(new Dictionary<string, LoadoutInventory>()));
-                Loadout.Instance.playerInvs[id]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                Loadout.Instance.playerInvs[id].inventories.Add(command[0], new LoadoutInventory(itemList, clothes));
                 UnturnedChat.Say(caller, Loadout.Instance.Translate("saved"));
 
                 if (DebugMode)
@@ -139,9 +139,9 @@ namespace ExPresidents.Loadout
                 if (DebugMode)
                     Logger.Log("Player has saves");
 
-                if (!Loadout.Instance.playerInvs[id]._invs.ContainsKey(command[0]))
+                if (!Loadout.Instance.playerInvs[id].inventories.ContainsKey(command[0]))
                 {
-                    Loadout.Instance.playerInvs[id]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                    Loadout.Instance.playerInvs[id].inventories.Add(command[0], new LoadoutInventory(itemList, clothes));
                     UnturnedChat.Say(caller, Loadout.Instance.Translate("saved"));
 
                     if (DebugMode)
@@ -149,8 +149,8 @@ namespace ExPresidents.Loadout
                 }
                 else
                 {
-                    Loadout.Instance.playerInvs[id]._invs.Remove(command[0]);
-                    Loadout.Instance.playerInvs[id]._invs.Add(command[0], new LoadoutInventory(itemList, clothes));
+                    Loadout.Instance.playerInvs[id].inventories.Remove(command[0]);
+                    Loadout.Instance.playerInvs[id].inventories.Add(command[0], new LoadoutInventory(itemList, clothes));
                     UnturnedChat.Say(caller, Loadout.Instance.Translate("replaced"));
 
                     if (DebugMode)

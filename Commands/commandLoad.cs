@@ -32,7 +32,7 @@ namespace ExPresidents.Loadout
                 return;
             }
 
-            if (!Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs.ContainsKey(command[0])) 
+            if (!Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories.ContainsKey(command[0])) 
             {
                 UnturnedChat.Say(player, Loadout.Instance.Translate("no_kit"));
                 return;
@@ -41,7 +41,7 @@ namespace ExPresidents.Loadout
             #region clothing
 
             PlayerClothing clo = player.Player.clothing;
-            LoadoutClothes clothes = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].clothes;
+            LoadoutClothes clothes = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories[command[0]].clothes;
 
             
             LoadoutClothing hat = clothes.hat;
@@ -64,9 +64,9 @@ namespace ExPresidents.Loadout
 
             #region items
 
-            for (int i = 0; i < Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].items.Count; i++)
+            for (int i = 0; i < Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories[command[0]].items.Count; i++)
             {
-                Item item = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID]._invs[command[0]].items[i];
+                Item item = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories[command[0]].items[i];
                 Item item2 = new Item(item.id, true)
                 {
                     metadata = item.metadata

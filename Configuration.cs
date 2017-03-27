@@ -22,8 +22,8 @@ namespace ExPresidents.Loadout
             DatabasePort = 3306;
             DatabaseAddress = "localhost";
             DatabaseName = "Unturned";
-            DatabaseUsername = "admin";
-            DatabasePassword = "admin";
+            DatabaseUsername = "unturned";
+            DatabasePassword = "";
             DebugMode = true;
             ItemLimit = 100;
             ItemBlacklist = new List<ushort>()

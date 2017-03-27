@@ -74,7 +74,9 @@ namespace ExPresidents.Loadout
 
         private MySqlConnection CreateConnection()
         {
-            return new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", Loadout.Instance.Configuration.Instance.DatabaseAddress, Loadout.Instance.Configuration.Instance.DatabaseName, Loadout.Instance.Configuration.Instance.DatabaseUsername, Loadout.Instance.Configuration.Instance.DatabasePassword, Loadout.Instance.Configuration.Instance.DatabasePort));
+            Configuration config = Loadout.Instance.Configuration.Instance;
+
+            return new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", config.DatabaseAddress, config.DatabaseName, config.DatabaseUsername,config.DatabasePassword, config.DatabasePort));
         }
 
         public void SaveDictionary(String ServerName)
@@ -106,11 +108,14 @@ namespace ExPresidents.Loadout
                 {
                     Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
                     object Result = Cmd.ExecuteNonQuery();
-                    MySqlDataReader Reader = Cmd.ExecuteReader();
-                    if (Reader.HasRows)
+                    using (MySqlDataReader Reader = Cmd.ExecuteReader())
                     {
-                        if (Reader.Read())
-                            Loadout.Instance.playerInvs = Reader.GetValue(1) as Dictionary<ulong, LoadoutList>;
+                        if (Reader.HasRows)
+                        {
+                            if (Reader.Read())
+                                Loadout.Instance.playerInvs = Reader.GetValue(1) as Dictionary<ulong, LoadoutList>;
+                        }
+                        Reader.Close();
                     }
                 }
                 Connection.Close();
@@ -127,11 +132,14 @@ namespace ExPresidents.Loadout
                 {
                     Cmd.CommandText = "Select * from loadout where servername = " + ServerName + ";";
                     object Result = Cmd.ExecuteNonQuery();
-                    MySqlDataReader Reader = Cmd.ExecuteReader();
-                    if (!Reader.HasRows)
-                        retval = false;
-                    else
-                        retval = true;
+                    using (MySqlDataReader Reader = Cmd.ExecuteReader())
+                    {
+                        if (!Reader.HasRows)
+                            retval = false;
+                        else
+                            retval = true;
+                        Reader.Close();
+                    }
                 }
                 Connection.Close();
                 return retval;
