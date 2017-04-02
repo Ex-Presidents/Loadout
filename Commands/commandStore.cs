@@ -1,19 +1,16 @@
 ﻿using Rocket.API;
 using Rocket.Unturned.Chat;
-using Rocket.Unturned.Player;
 using SDG.Unturned;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Logger = Rocket.Core.Logging.Logger;
 
 namespace ExPresidents.Loadout
 {
-    public class commandStore : IRocketCommand
+    public class CommandStore : IRocketCommand
     {
         #region Properties
+
         public AllowedCaller AllowedCaller { get { return AllowedCaller.Both; } }
 
         public string Name { get { return "storekits"; } }
@@ -37,7 +34,7 @@ namespace ExPresidents.Loadout
                 else
                     UnturnedChat.Say(caller, Loadout.Instance.Translate("syntax"));
             }
-            if(Loadout.Instance.playerInvs == null)
+            if (Loadout.Instance.playerInvs == null)
             {
                 if (caller.Id == "Console")
                     Logger.Log(Loadout.Instance.Translate("null"));

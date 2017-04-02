@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using ExPresidents.Loadout.items;
+using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -11,6 +12,7 @@ namespace ExPresidents.Loadout
     public class CommandSave : IRocketCommand
     {
         #region Properties
+
         public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
 
         public string Name { get { return "savekit"; } }
@@ -39,7 +41,7 @@ namespace ExPresidents.Loadout
 
             ulong id = player.CSteamID.m_SteamID;
 
-            List<Item> itemList = new List<Item>();
+            List<LItem> itemList = new List<LItem>();
 
             PlayerClothing clo = player.Player.clothing;
 
@@ -70,14 +72,14 @@ namespace ExPresidents.Loadout
                             continue;
                         }
                     }
-                    itemList.Add(item);
+                    itemList.Add(new LItem(item.id, item.metadata));
                 }
             }
 
             if (DebugMode)
                 Logger.Log("Beginning blacklist check");
 
-            if(itemList.Count > Loadout.Instance.Configuration.Instance.ItemLimit)
+            if (itemList.Count > Loadout.Instance.Configuration.Instance.ItemLimit)
             {
                 UnturnedChat.Say(caller, Loadout.Instance.Translate("too_much", Loadout.Instance.Configuration.Instance.ItemLimit, itemList.Count));
                 return;

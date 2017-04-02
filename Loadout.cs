@@ -1,8 +1,8 @@
 ﻿using Rocket.API.Collections;
 using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace ExPresidents.Loadout
 {
@@ -10,7 +10,7 @@ namespace ExPresidents.Loadout
     {
         #region Fields
 
-        public Dictionary <ulong, LoadoutList> playerInvs;
+        public Dictionary<ulong, LoadoutList> playerInvs;
         public static Loadout Instance;
         public DBManager DB;
         private bool DebugMode;
@@ -35,7 +35,7 @@ namespace ExPresidents.Loadout
             {
                 if (DebugMode)
                     Logger.Log("Dictionary found, attempting to load it.");
-                try {  DB.LoadDictionary(SDG.Unturned.Provider.ip.ToString()); }
+                try { DB.LoadDictionary(SDG.Unturned.Provider.ip.ToString()); }
                 catch (Exception ex) { Logger.LogException(ex); }
             }
             Logger.LogWarning("\tPlugin Loadout loaded successfully.");
@@ -48,7 +48,7 @@ namespace ExPresidents.Loadout
                 if (playerInvs != null)
                     DB.SaveDictionary(SDG.Unturned.Provider.ip.ToString());
             }
-            catch(Exception ex) { Logger.LogException(ex); }
+            catch (Exception ex) { Logger.LogException(ex); }
 
             Logger.Log("\tPlugin Loadout unloaded successfully.");
         }

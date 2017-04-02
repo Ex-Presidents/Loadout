@@ -75,16 +75,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BArrayManager.cs" />
-    <Compile Include="Commands\commandStore.cs" />
+    <Compile Include="Commands\CommandStore.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DBManager.cs" />
+    <Compile Include="items\LItem.cs" />
     <Compile Include="Loadout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\commandSave.cs" />
-    <Compile Include="Commands\commandLoad.cs" />
+    <Compile Include="Commands\CommandSave.cs" />
+    <Compile Include="Commands\CommandLoad.cs" />
     <Compile Include="LoadoutInventory.cs" />
-    <Compile Include="clothes\LoadoutClothes.cs" />
-    <Compile Include="clothes\LoadoutClothing.cs" />
+    <Compile Include="items\LoadoutClothes.cs" />
+    <Compile Include="items\LoadoutClothing.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />

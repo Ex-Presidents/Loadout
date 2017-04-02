@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using ExPresidents.Loadout.items;
+using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -9,6 +10,7 @@ namespace ExPresidents.Loadout
     public class CommandLoad : IRocketCommand
     {
         #region Properties
+
         public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
 
         public string Name { get { return "loadkit"; } }
@@ -32,7 +34,7 @@ namespace ExPresidents.Loadout
                 return;
             }
 
-            if (!Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories.ContainsKey(command[0])) 
+            if (!Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories.ContainsKey(command[0]))
             {
                 UnturnedChat.Say(player, Loadout.Instance.Translate("no_kit"));
                 return;
@@ -43,7 +45,6 @@ namespace ExPresidents.Loadout
             PlayerClothing clo = player.Player.clothing;
             LoadoutClothes clothes = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories[command[0]].clothes;
 
-            
             LoadoutClothing hat = clothes.hat;
             LoadoutClothing glasses = clothes.glasses;
             LoadoutClothing mask = clothes.mask;
@@ -66,10 +67,10 @@ namespace ExPresidents.Loadout
 
             for (int i = 0; i < Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories[command[0]].items.Count; i++)
             {
-                Item item = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories[command[0]].items[i];
-                Item item2 = new Item(item.id, true)
+                LItem item = Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories[command[0]].items[i];
+                Item item2 = new Item(item.ID, true)
                 {
-                    metadata = item.metadata
+                    metadata = item.Meta
                 };
                 player.Inventory.tryAddItem(item2, true);
             }

@@ -13,8 +13,10 @@ namespace ExPresidents.Loadout
         public string DatabasePassword;
         public bool DebugMode;
         public int ItemLimit;
+
         [XmlArrayItem(ElementName = "Item")]
         public List<ushort> ItemBlacklist;
+
         public bool DenyOnBlacklist;
 
         public void LoadDefaults()

@@ -1,18 +1,20 @@
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
-
 using Logger = Rocket.Core.Logging.Logger;
 
 namespace ExPresidents.Loadout
 {
     public class DBManager
     {
-        bool DebugMode;
+        private bool DebugMode;
 
         #region Schemas
 
-        public DBManager() { CheckSchema(); }
+        public DBManager()
+        {
+            CheckSchema();
+        }
 
         private void CheckSchema()
         {
@@ -76,7 +78,7 @@ namespace ExPresidents.Loadout
         {
             Configuration config = Loadout.Instance.Configuration.Instance;
 
-            return new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", config.DatabaseAddress, config.DatabaseName, config.DatabaseUsername,config.DatabasePassword, config.DatabasePort));
+            return new MySqlConnection(String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", config.DatabaseAddress, config.DatabaseName, config.DatabaseUsername, config.DatabasePassword, config.DatabasePort));
         }
 
         public void SaveDictionary(String ServerName)
