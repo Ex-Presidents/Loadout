@@ -20,6 +20,19 @@ namespace ExPresidents.Loadout
         protected override void Load()
         {
             Instance = this;
+            try
+            {
+                if(KUtils.Main.Load(typeof(Loadout).Assembly) == KUtils.Error.OUTDATED)
+                {
+                    Logger.Log("Please update KUtils or plugin to use plugin.");
+                    UnloadPlugin();
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Log("Please update KUtils or plugin to use plugin.");
+                    UnloadPlugin();
+            }
             DebugMode = Instance.Configuration.Instance.DebugMode;
             if (DebugMode)
                 Logger.Log("Initializing database.");

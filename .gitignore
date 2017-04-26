@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+KUtils.dll
 
 # Build results
 [Dd]ebug/
