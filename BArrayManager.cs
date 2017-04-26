@@ -18,7 +18,7 @@ namespace ExPresidents.Loadout
             }
         }
 
-        public static Dictionary<ulong, LoadoutList> ToObject(Byte[] BArray)
+        public static Object ToObject(Byte[] BArray)
         {
             using (MemoryStream MStream = new MemoryStream())
             {

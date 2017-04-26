@@ -115,7 +115,7 @@ namespace ExPresidents.Loadout
                         if (Reader.HasRows)
                         {
                             if (Reader.Read())
-                                Loadout.Instance.playerInvs = BArrayManager.ToObject((byte[])Reader.GetValue(1)); 
+                                Loadout.Instance.playerInvs = (Dictionary<ulong, LoadoutList>)BArrayManager.ToObject((byte[])Reader.GetValue(1)); 
                         }
                         Reader.Close();
                     }

@@ -13,17 +13,17 @@ namespace ExPresidents.Loadout
     {
         #region Properties
 
-        public AllowedCaller AllowedCaller { get { return AllowedCaller.Player; } }
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
-        public string Name { get { return "savekit"; } }
+        public string Name => "savekit";
 
-        public string Help { get { return "This command will save your current gear, you can load it by typing /loadkit"; } }
+        public string Help => "This command will save your current gear, you can load it by typing /loadkit";
 
-        public string Syntax { get { return "[Kit Name]"; } }
+        public string Syntax => "[Kit Name]";
 
-        public List<string> Aliases { get { return new List<string>(); } }
+        public List<string> Aliases => new List<string>();
 
-        public List<string> Permissions { get { return new List<string> { "loadout.savekit" }; } }
+        public List<string> Permissions => new List<string> { "loadout.savekit" };
 
         #endregion Properties
 
