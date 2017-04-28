@@ -1,8 +1,16 @@
 ﻿using Rocket.API.Collections;
-using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
 using Rocket.Core.Plugins;
+using Rocket.API;
+using Rocket.Unturned.Events;
+using Rocket.Unturned.Player;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
+
+using Logger = Rocket.Core.Logging.Logger;
+using SDG.Unturned;
+using ExPresidents.Loadout.items;
 
 namespace ExPresidents.Loadout
 {
@@ -11,6 +19,7 @@ namespace ExPresidents.Loadout
         #region Fields
 
         public Dictionary<ulong, LoadoutList> playerInvs;
+        public List<ulong> Autos;
         public static Loadout Instance;
         public DBManager DB;
         private bool DebugMode;
@@ -51,7 +60,8 @@ namespace ExPresidents.Loadout
                 try { DB.LoadDictionary(SDG.Unturned.Provider.ip.ToString()); }
                 catch (Exception ex) { Logger.LogException(ex); }
             }
-            Logger.LogWarning("\tPlugin Loadout loaded successfully.");
+            UnturnedPlayerEvents.OnPlayerRevive += OnRevive;
+            Logger.LogWarning("\tLoadout loaded successfully.");
         }
 
         protected override void Unload()
@@ -62,8 +72,60 @@ namespace ExPresidents.Loadout
                     DB.SaveDictionary(SDG.Unturned.Provider.ip.ToString());
             }
             catch (Exception ex) { Logger.LogException(ex); }
-
+            UnturnedPlayerEvents.OnPlayerRevive -= OnRevive;
             Logger.Log("\tPlugin Loadout unloaded successfully.");
+        }
+
+        public void OnRevive(UnturnedPlayer Player, Vector3 Place , byte idk)
+        {
+            if(Autos.Contains(Player.CSteamID.m_SteamID) && ((IRocketPlayer)Player).HasPermission("loadout.autoload"))
+            {
+                LoadoutList List = playerInvs[Player.CSteamID.m_SteamID];
+                if (List.inventories.ContainsKey("default"))
+                {
+                    LoadoutInventory Inventory = List.inventories["default"];
+
+                    #region clothing
+
+                    PlayerClothing clo = Player.Player.clothing;
+                    LoadoutClothes clothes = Inventory.clothes;
+
+                    LoadoutClothing hat = clothes.hat;
+                    LoadoutClothing glasses = clothes.glasses;
+                    LoadoutClothing mask = clothes.mask;
+                    LoadoutClothing shirt = clothes.shirt;
+                    LoadoutClothing vest = clothes.vest;
+                    LoadoutClothing backpack = clothes.backpack;
+                    LoadoutClothing pants = clothes.pants;
+
+                    if (hat != null) clo.askWearHat(hat.id, hat.quality, hat.state, true);
+                    if (glasses != null) clo.askWearGlasses(glasses.id, glasses.quality, glasses.state, true);
+                    if (mask != null) clo.askWearMask(mask.id, mask.quality, mask.state, true);
+                    if (shirt != null) clo.askWearShirt(shirt.id, shirt.quality, shirt.state, true);
+                    if (vest != null) clo.askWearVest(vest.id, vest.quality, vest.state, true);
+                    if (backpack != null) clo.askWearBackpack(backpack.id, backpack.quality, backpack.state, true);
+                    if (pants != null) clo.askWearPants(pants.id, pants.quality, pants.state, true);
+
+                    #endregion clothing
+
+                    #region items
+
+                    for (int i = 0; i < Inventory.items.Count; i++)
+                    {
+                        LItem item = Inventory.items[i];
+                        Item item2 = new Item(item.ID, true)
+                        {
+                            metadata = item.Meta
+                        };
+                        Player.Inventory.tryAddItem(item2, true);
+                    }
+
+                    #endregion items
+                    UnturnedChat.Say(Player, Instance.Translate("auto_loaded"));
+                }
+                else
+                    UnturnedChat.Say(Player, Instance.Translate("no_default"));
+            }
         }
 
         public override TranslationList DefaultTranslations
@@ -73,7 +135,9 @@ namespace ExPresidents.Loadout
                 return new TranslationList()
                 {
                     {"no_kit", "You have no kits saved!"},
+                    {"no_default", "You have no default kit saved!"},
                     {"loaded", "Loaded kit successfully!"},
+                    {"auto_loaded", "Automatically loaded kit successfully!"},
                     {"saved", "Saved kit successfully!"},
                     {"replaced", "Replaced kit successfully!" },
                     {"syntax", "You used this command with invalid syntax." },

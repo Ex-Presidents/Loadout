@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Rocket.API;
+﻿using Rocket.API;
 using Rocket.Unturned.Chat;
 using SDG.Unturned;
 using System.Collections.Generic;

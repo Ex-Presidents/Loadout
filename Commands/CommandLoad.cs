@@ -34,6 +34,22 @@ namespace ExPresidents.Loadout
                 return;
             }
 
+            if(command[0].ToUpperInvariant() == "AUTO")
+            {
+                if (Loadout.Instance.Autos.Contains(player.CSteamID.m_SteamID))
+                {
+                    Loadout.Instance.Autos.Remove(player.CSteamID.m_SteamID);
+                    UnturnedChat.Say(player, "Auto loading toggled off.");
+                    return;
+                }
+                else
+                {
+                    Loadout.Instance.Autos.Add(player.CSteamID.m_SteamID);
+                    UnturnedChat.Say(player, "Auto loading toggled on.");
+                    return;
+                }
+            }
+
             if (!Loadout.Instance.playerInvs[player.CSteamID.m_SteamID].inventories.ContainsKey(command[0]))
             {
                 UnturnedChat.Say(player, Loadout.Instance.Translate("no_kit"));
