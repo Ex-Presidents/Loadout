@@ -11,6 +11,7 @@ namespace ExPresidents.Loadout
         public string DatabaseAddress;
         public string DatabaseUsername;
         public string DatabasePassword;
+        public string TableIndex;
         public bool DebugMode;
         public int ItemLimit;
 
@@ -26,6 +27,7 @@ namespace ExPresidents.Loadout
             DatabaseName = "Unturned";
             DatabaseUsername = "unturned";
             DatabasePassword = "";
+            TableIndex = "myservers";
             DebugMode = true;
             ItemLimit = 100;
             ItemBlacklist = new List<ushort>()

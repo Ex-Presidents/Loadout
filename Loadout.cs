@@ -48,7 +48,7 @@ namespace ExPresidents.Loadout
                 Logger.Log("Initializing database.");
             try { DB = new DBManager(); }
             catch (Exception ex) { Logger.LogException(ex); }
-            if (!DB.CheckDictionary(SDG.Unturned.Provider.ip.ToString()))
+            if (!DB.CheckDictionary(Instance.Configuration.Instance.TableIndex))
             {
                 playerInvs = new Dictionary<ulong, LoadoutList>();
                 if (DebugMode)
@@ -58,7 +58,7 @@ namespace ExPresidents.Loadout
             {
                 if (DebugMode)
                     Logger.Log("Dictionary found, attempting to load it.");
-                try { DB.LoadDictionary(SDG.Unturned.Provider.ip.ToString()); }
+                try { DB.LoadDictionary(Instance.Configuration.Instance.TableIndex); }
                 catch (Exception ex) { Logger.LogException(ex); }
             }
             UnturnedPlayerEvents.OnPlayerRevive += OnRevive;
