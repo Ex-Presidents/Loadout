@@ -42,6 +42,7 @@ namespace ExPresidents.Loadout
                 Logger.Log("Please update KUtils or plugin to use plugin.");
                     UnloadPlugin();
             }
+            Autos = new List<ulong>();
             DebugMode = Instance.Configuration.Instance.DebugMode;
             if (DebugMode)
                 Logger.Log("Initializing database.");
